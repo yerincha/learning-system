@@ -28,7 +28,10 @@ const Student = sequelize.define('students', {
       isEmail: true
     },
   },
-  phone: Sequelize.INTEGER,
+  phone: Sequelize.STRING,
+  cohort: Sequelize.STRING,
+  password: Sequelize.STRING,
+  passwordConfirmation: Sequelize.STRING,
 });
 
 const StudentCourse = sequelize.define('studentCourses', {
