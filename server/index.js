@@ -30,7 +30,7 @@ app.get('/admin', (req, res) => {
 });
 
 app.get('/student', (req, res) => {
-  db.StudentCourse.findAll({
+  db.StudentCourse.findOne({
     where: {
       studentId: req.query.id
     }

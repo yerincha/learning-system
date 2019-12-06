@@ -12,9 +12,6 @@ class App extends React.Component {
     }
   }
 
-  // fetchUserData(){
-  //   axios.get()
-  // }
 
   render() {
     return (
