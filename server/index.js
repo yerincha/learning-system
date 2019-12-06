@@ -20,7 +20,7 @@ app.use(Auth.createSession);
 // Load data from db
 
 app.get('/admin', (req, res) => {
-  db.Course.findAll()
+  db.Course.findOne()
     .then((result) => {
       res.send(result[0].dataValues);
     })

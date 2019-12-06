@@ -25,14 +25,13 @@ class SignupForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    const { name, email, phone, cohort, password, passwordConfirmation } = this.state;
+    const { name, email, phone, cohort, password } = this.state;
     const data = {
       name,
       email,
       phone,
       cohort,
       password,
-      passwordConfirmation,
     }
     axios.post('/api/admin_signup', data);
   }

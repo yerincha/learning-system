@@ -5,21 +5,6 @@ const sequelize = new Sequelize('LMS', 'root', null, {
   dialect: 'mysql',
 });
 
-// const Admin = sequelize.define('admins', {
-//   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
-//   name: Sequelize.STRING,
-//   email: {
-//     type: Sequelize.STRING,
-//     unique: true,
-//     validate: {
-//       isEmail: true
-//     },
-//   },
-//   salt: Sequelize.STRING,
-//   phone: Sequelize.STRING,
-//   password: Sequelize.STRING,
-// });
-
 const User = sequelize.define('users', {
   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
   name: Sequelize.STRING,
@@ -103,9 +88,6 @@ Course.belongsToMany(User, { through: StudentCourse });
 
 User.hasMany(Session, { foreignKey: 'userId' });
 Session.belongsTo(User, { foreignKey: 'userId' });
-
-// Admin.hasMany(Session, { foreignKey: 'adminId' });
-// Session.belongsTo(Admin, { foreignKey: 'adminId' });
 
 Course.hasMany(Container, { foreignKey: 'courseId' });
 Container.belongsTo(Course, { foreignKey: 'courseId' });
