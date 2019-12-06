@@ -5,12 +5,8 @@ class LoginForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
       email: '',
-      phone: '',
-      cohort: '',
       password: '',
-      passwordConfirmation: '',
     }
 
     this.onChange = this.onChange.bind(this);
@@ -25,7 +21,16 @@ class LoginForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    axios.post('/api/students', { student: this.state })
+    const { email, password } = this.state;
+    axios.post('/api/login', { email, password })
+    .then((res) => {
+      if(res.ok && window) {
+        <Link to='/' />
+      } else {
+        // window.location.href='login';
+        <Link to='/login' />
+      }
+    })
   }
   render() {
     return (
