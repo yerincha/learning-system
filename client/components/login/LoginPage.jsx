@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import LoginForm from './LoginForm.jsx';
+import LoginForm from './LoginForm';
 
 
 class LoginPage extends Component {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-
+import {Redirect} from 'react-router-dom';
 class LoginForm extends Component {
   constructor(props) {
     super(props);
@@ -25,10 +25,9 @@ class LoginForm extends Component {
     axios.post('/api/login', { email, password })
     .then((res) => {
       if(res.ok && window) {
-        <Link to='/' />
+        <Redirect to='/'/>
       } else {
-        // window.location.href='login';
-        <Link to='/login' />
+        <Redirect to='/login'/>
       }
     })
   }

@@ -171,6 +171,7 @@ app.post('/api/login', (req, res) => {
     .then((bool) => {
       if (!bool) throw bool;
       console.log('Successfully logged in!');
+      res.send(200);
     })
     .catch(() => {
       console.log('login error');
