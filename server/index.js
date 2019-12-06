@@ -63,7 +63,7 @@ app.post('/api/admin_signup', (req, res) => {
   };
 
 
-  return db.User.findAll({
+  return db.User.findOne({
     where: {
       email,
     },
@@ -105,7 +105,7 @@ app.post('/api/signup', (req, res) => {
     cohort,
   };
 
-  return db.User.findAll({
+  return db.User.findOne({
     where: {
       email,
     },
