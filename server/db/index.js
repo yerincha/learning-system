@@ -5,7 +5,7 @@ const sequelize = new Sequelize('LMS', 'root', null, {
   dialect: 'mysql',
 });
 
-const Admin = sequelize.define('admins', {
+const User = sequelize.define('users', {
   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
   name: Sequelize.STRING,
   email: {
@@ -15,21 +15,31 @@ const Admin = sequelize.define('admins', {
       isEmail: true
     },
   },
-  phone: Sequelize.INTEGER,
+  salt: Sequelize.STRING,
+  cohort: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  admin: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+  },
+  password: Sequelize.STRING,
+  phone: Sequelize.STRING,
 });
 
-const Student = sequelize.define('students', {
+const Session = sequelize.define('sessions', {
   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
-  name: Sequelize.STRING,
-  email: {
-    type: Sequelize.STRING,
-    unique: true,
-    validate: {
-      isEmail: true
+  hash: Sequelize.STRING,
+  userId: {
+    type: Sequelize.INTEGER,
+    references: {
+      model: 'users',
+      key: 'id',
     },
   },
-  phone: Sequelize.INTEGER,
-});
+})
+
 
 const StudentCourse = sequelize.define('studentCourses', {
   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
@@ -73,8 +83,11 @@ const Content = sequelize.define('content', {
 });
 
 
-Student.belongsToMany(Course, { through: StudentCourse });
-Course.belongsToMany(Student, { through: StudentCourse });
+User.belongsToMany(Course, { through: StudentCourse });
+Course.belongsToMany(User, { through: StudentCourse });
+
+User.hasMany(Session, { foreignKey: 'userId' });
+Session.belongsTo(User, { foreignKey: 'userId' });
 
 Course.hasMany(Container, { foreignKey: 'courseId' });
 Container.belongsTo(Course, { foreignKey: 'courseId' });
@@ -92,16 +105,16 @@ sequelize.authenticate()
   });
 
 
-Admin.sync();
-Student.sync();
+User.sync();
 StudentCourse.sync();
+Session.sync();
 Course.sync();
 Container.sync();
 Content.sync();
 
 module.exports = {
-  Admin,
-  Student,
+  User,
+  Session,
   StudentCourse,
   Course,
   Container,
