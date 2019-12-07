@@ -34,7 +34,7 @@ class App extends React.Component {
       loggedIn: true,
       userId: user.id,
       isAdmin: user.admin,
-    });
+    },() => this.fetchUserData());
   }
 
   fetchUserData() {
@@ -71,7 +71,7 @@ class App extends React.Component {
     axios.get('/api/signout');
     this.setState({
       loggedIn: false,
-    }, window.location.reload());
+    });
   }
 
 

@@ -4,11 +4,10 @@ import PropTypes from 'prop-types';
 
 class Signout extends Component {
   componentDidMount() {
-    const { loggedOut } = this.props;
-    if (loggedOut) {
-      // eslint-disable-next-line no-alert
-      alert('안전하게 로그아웃 되었습니다.');
-    }
+    const { signout } = this.props;
+    signout();
+    // eslint-disable-next-line no-alert
+    alert('안전하게 로그아웃 되었습니다.');
   }
 
   render() {
@@ -21,7 +20,7 @@ class Signout extends Component {
 }
 
 Signout.propTypes = {
-
+  signout: PropTypes.func.isRequired,
 };
 
 export default Signout;
