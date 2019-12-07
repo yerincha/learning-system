@@ -12,7 +12,7 @@ const User = sequelize.define('users', {
     type: Sequelize.STRING,
     unique: true,
     validate: {
-      isEmail: true
+      isEmail: true,
     },
   },
   salt: Sequelize.STRING,
@@ -38,15 +38,16 @@ const Session = sequelize.define('sessions', {
       key: 'id',
     },
   },
-})
+});
 
 
-const StudentCourse = sequelize.define('studentCourses', {
+const UserCourse = sequelize.define('userCourses', {
   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
 });
 
 const Course = sequelize.define('courses', {
   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+  title: Sequelize.STRING,
   updatedAt: Sequelize.DATE,
   createdAt: Sequelize.DATE,
   madeBy: Sequelize.STRING,
@@ -79,12 +80,12 @@ const Content = sequelize.define('content', {
     },
   },
   data: Sequelize.JSON,
-  published: { type: Sequelize.BOOLEAN, defaultValue:false },
+  published: { type: Sequelize.BOOLEAN, defaultValue: false },
 });
 
 
-User.belongsToMany(Course, { through: StudentCourse });
-Course.belongsToMany(User, { through: StudentCourse });
+User.belongsToMany(Course, { through: UserCourse });
+Course.belongsToMany(User, { through: UserCourse });
 
 User.hasMany(Session, { foreignKey: 'userId' });
 Session.belongsTo(User, { foreignKey: 'userId' });
@@ -100,13 +101,13 @@ sequelize.authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
   })
-  .catch(err => {
+  .catch((err) => {
     console.error('Unable to connect to the database:', err);
   });
 
 
 User.sync();
-StudentCourse.sync();
+UserCourse.sync();
 Session.sync();
 Course.sync();
 Container.sync();
@@ -115,7 +116,7 @@ Content.sync();
 module.exports = {
   User,
   Session,
-  StudentCourse,
+  UserCourse,
   Course,
   Container,
   Content,
