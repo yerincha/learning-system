@@ -56,7 +56,8 @@ module.exports.createSession = (req, res, next) => {
 };
 
 module.exports.verifySession = (req, res, next) => {
-  if (req.session.user) {
+  // eslint-disable-next-line no-extra-boolean-cast
+  if (!!req.session.user) {
     res.redirect('/login');
   } else {
     next();
