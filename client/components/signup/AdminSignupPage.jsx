@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 
-import SignupForm from './SignupForm.jsx';
+import AdminSignupForm from './AdminSignupForm.jsx';
 
 
-class SignupPage extends Component {
+class AdminSignupPage extends Component {
   render() {
     return (
       <div className="row">
         <div className="col-md-4 col-md-offset-4">
-          <SignupForm />
+          <AdminSignupForm />
         </div>
       </div>
     );
   }
 }
 
-export default SignupPage;
+export default AdminSignupPage;

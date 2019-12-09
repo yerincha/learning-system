@@ -1,20 +1,22 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable no-alert */
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Link, Redirect } from 'react-router-dom';
 
-class SignupForm extends Component {
+class AdminSignupForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       name: '',
       email: '',
       phone: '',
-      cohort: null,
       password: '',
       passwordConfirmation: '',
-      admin: false,
+      passcode: '',
+      admin: true,
       submitted: false,
-    }
+    };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -28,28 +30,32 @@ class SignupForm extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    const { name, email, phone, cohort, password, admin, passwordConfirmation } = this.state;
-    if(password !== passwordConfirmation) {
+    const {
+      name, email, phone, admin, password, passwordConfirmation, passcode,
+    } = this.state;
+    if (password !== passwordConfirmation) {
       alert('비밀번호와 비밀번호 확인이 맞지 않습니다. 비밀번호를 다시 확인해주세요');
+    } else if (passcode !== 'P@ssc@dE') {
+      alert('관리자 패스코드가 틀렸습니다');
     } else {
+      this.setState();
       const data = {
         name,
         email,
         phone,
-        cohort,
-        password,
         admin,
-      }
-      axios.post('/api/signup', data)
-      .then(() => {
-        this.setState({
-          submitted: true,
+        password,
+      };
+      axios.post('/api/admin_signup', data)
+        .then(() => {
+          this.setState({
+            submitted: true,
+          });
+          alert('회원 가입을 환영합니다. 로그인 해 주세요.');
+        })
+        .catch(() => {
+          alert('이미 등록된 이메일입니다. 다시 시도해주세요.');
         });
-        alert('회원 가입을 환영합니다. 로그인 해 주세요.')
-      })
-      .catch(() => {
-        alert('이미 등록된 이메일입니다. 다시 시도해주세요.')
-      });
     }
   }
 
@@ -57,7 +63,7 @@ class SignupForm extends Component {
     const { submitted } = this.state;
     return (
       <form onSubmit={this.onSubmit}>
-        <h1>Sign up</h1>
+        <h1>관라자 등록하기</h1>
         <div className="form-group">
           <label className="control-label">Name</label>
           <input
@@ -116,22 +122,22 @@ class SignupForm extends Component {
           />
         </div>
         <div className="form-group">
-          <label className="control-label">Your Cohort</label>
-          <select className="form-control" name="cohort" onChange={this.onChange} >
-            <option value="" disabled> Choose your cohort </option>
-            <option> Flex 1기 </option>
-            <option> Flex 2기 </option>
-            <option> Full-time 1기</option>
-            <option> Full-time 2기</option>
-            <option> 주말 직장인 반 1기</option>
-          </select>
+          <label className="control-label">관리자 패스코드</label>
+          <input
+            type="password"
+            className="form-control"
+            name="passcode"
+            placeholder="관리자 패스코드를 입력해주세요"
+            onChange={this.onChange}
+            required
+          />
         </div>
         <button type="submit" className="btn btn-primary">Submit</button>
         {submitted ? <Redirect to="/login" /> : null}
-        <div><Link to="/admin_signup" > 관리자 이십니까? </Link></div>
+        <div><Link to="/signup"> 관리자가 아니십니까? </Link></div>
       </form>
     );
   }
 }
 
-export default SignupForm;
+export default AdminSignupForm;

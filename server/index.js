@@ -20,14 +20,55 @@ app.use(Auth.createSession);
 
 // Load data from db
 
-app.get('/admin', (req, res) => {
-  db.Course.findAll()
-    .then((result) => {
-      res.send(result[0].dataValues);
-    })
-    .catch(() => {
-      res.sendStatus(500);
-    });
+app.get('/user', (req, res) => {
+  const user = {
+    id: req.query.id,
+    admin: req.body.isAdmin,
+    course: null,
+  };
+
+  if (req.query.id === '') {
+    if (req.session.dataValues.userId) {
+      user.id = req.session.userId;
+      db.User.findOne({
+        where: {
+          id: user.id,
+        },
+      })
+        .then((data) => {
+          user.admin = data.admin;
+        });
+    } else {
+      res.sendStatus(203);
+    }
+  }
+
+  if (user.id !== '') {
+    if (user.admin) {
+      db.Course.findAll()
+        .then((result) => {
+          user.course = result;
+          res.send(user).status(200);
+        })
+        .catch(() => {
+          res.sendStatus(500);
+        });
+    } else {
+      db.UserCourse.findAll({
+        where: {
+          userId: user.id,
+        },
+      })
+        .then((result) => {
+          user.course = result;
+          res.send(user).status(200);
+        })
+        .catch((err) => {
+          console.log(err);
+          res.sendStatus(500);
+        });
+    }
+  }
 });
 
 app.get('/student', (req, res) => {
@@ -47,6 +88,57 @@ app.get('/student', (req, res) => {
 
 // Sign up
 
+// Student Sign up
+
+app.post('/api/signup', (req, res) => {
+  const {
+    name,
+    email,
+    phone,
+    password,
+    cohort,
+  } = req.body;
+  const salt = utils.createRandom32String();
+  const data = {
+    name,
+    email,
+    phone,
+    password: utils.createHash(password, salt),
+    admin: false,
+    salt,
+    cohort,
+  };
+
+  return db.User.findOne({
+    where: {
+      email,
+    },
+  })
+    .tap((user) => {
+      // console.log(user);
+      if (user) {
+        throw user;
+      }
+    })
+    .then(() => {
+      console.log('creating');
+      return db.User.create(data);
+    })
+    .then((results) => {
+      console.log(results);
+      const insertId = results.dataValues.id;
+      return db.Session.update({ userId: insertId }, { where: { id: req.session.id } });
+    })
+    .then(() => {
+      console.log('New Student signed up successfully');
+      res.sendStatus(200);
+    })
+    .catch((user) => {
+      console.log('catch', user);
+      res.sendStatus(500);
+    });
+});
+
 // Admin Sign up
 
 app.post('/api/admin_signup', (req, res) => {
@@ -65,9 +157,9 @@ app.post('/api/admin_signup', (req, res) => {
     phone,
     password: utils.createHash(password, salt),
     admin: true,
+    cohort: null,
     salt,
   };
-
 
   return db.User.findOne({
     where: {
@@ -76,7 +168,7 @@ app.post('/api/admin_signup', (req, res) => {
   })
     .tap((user) => {
       // console.log(user);
-      if (user.length !== 0) {
+      if (user) {
         throw user;
       }
     })
@@ -91,60 +183,11 @@ app.post('/api/admin_signup', (req, res) => {
     })
     .then(() => {
       console.log('New Admin signed up successfully');
-      res.redirect('/');
+      res.sendStatus(200);
     })
     .catch((user) => {
       console.log('catch', user);
-      res.redirect('/admin_signup');
-    });
-});
-
-// Student sign up
-
-app.post('/api/signup', (req, res) => {
-  const {
-    name,
-    email,
-    phone,
-    password,
-    cohort,
-  } = req.body;
-
-  const data = {
-    name,
-    email,
-    phone,
-    password,
-    cohort,
-  };
-
-  return db.User.findOne({
-    where: {
-      email,
-    },
-  })
-    .tap((user) => {
-      // console.log(user)
-      if (user.length !== 0) {
-        throw user;
-      }
-    })
-    .then(() => {
-      console.log('creating');
-      return db.User.create(data);
-    })
-    .then((results) => {
-      // console.log(results);
-      const insertId = results.dataValues.id;
-      return db.Session.update({ userId: insertId }, { where: { id: req.session.id } });
-    })
-    .then(() => {
-      // console.log('New student signed up successfully');
-      res.redirect('/');
-    })
-    .catch((user) => {
-      console.log('catch', user);
-      res.redirect('/signup');
+      res.sendStatus(500);
     });
 });
 
@@ -156,28 +199,50 @@ app.post('/api/login', (req, res) => {
     return res.sendStatus(404);
   }
   const { email, password } = req.body;
+  let user;
   return db.User.findOne({
     where: {
       email,
     },
   })
-    .then((user) => {
-      if (!user) {
-        throw user;
+    .then((userId) => {
+      if (!userId) {
+        throw userId;
       }
-      return user;
+      return userId;
     })
-    .then((data) => utils.compareHash(password, data.password, data.salt))
+    .then((data) => {
+      user = { id: data.dataValues.id, admin: data.dataValues.admin };
+      return utils.compareHash(password, data.password, data.salt);
+    })
     .then((bool) => {
       if (!bool) throw bool;
-      console.log('Successfully logged in!');
+      return db.Session.update({ userId: user.id }, { where: { id: req.session.id } });
     })
-    .catch(() => {
-      console.log('login error');
-      // res.redirect('/login')
+    .then(() => {
+      console.log('Successfully logged in!');
+      res.send(user).status(200);
+    })
+    .catch((err) => {
+      console.log('login error', err);
+      res.sendStatus(500);
     });
 });
 
+// log out
+
+app.get('/api/signout', (req, res) => db.Session.destroy({
+  where: {
+    hash: req.cookies.cslms,
+  },
+})
+  .then(() => {
+    res.clearCookie('cslms');
+    res.sendStatus(200);
+  })
+  .error((error) => {
+    res.status(500).send(error);
+  }));
 
 // listening port
 app.listen(port, () => {
