@@ -5,13 +5,13 @@ import {
 } from 'react-router-dom';
 import axios from 'axios';
 
-import NavigationBar from './components/NavigationBar.jsx';
-import Greetings from './components/Greetings.jsx';
-import SignupPage from './components/signup/SignupPage.jsx';
-import AdminSignupPage from './components/signup/AdminSignupPage.jsx';
-import LoginPage from './components/login/LoginPage.jsx';
-import Signout from './components/login/Signout.jsx';
-import Student from './components/Student.jsx';
+import NavigationBar from './components/NavigationBar';
+import Greetings from './components/Greetings';
+import Student from './components/Student';
+import SignupForm from './components/SignForm/SignUpForm';
+import AdminSignupForm from './components/SignForm/AdminSignUpForm';
+import SignInForm from './components/SignForm/SignInForm';
+import SignOut from './components/SignForm/SignOut';
 
 class App extends React.Component {
   constructor(props) {
@@ -32,7 +32,7 @@ class App extends React.Component {
   }
 
   login(user) {
-    console.log('user', user);
+    // console.log('user', user);
     this.setState({
       loggedIn: true,
       userId: user.id,
@@ -100,19 +100,19 @@ class App extends React.Component {
         <NavigationBar loggedIn={loggedIn} />
         <Switch>
           <Route exact path="/login">
-            <LoginPage loggedIn={loggedIn} login={this.login} />
+            <SignInForm login={this.login} loggedIn={loggedIn} />
           </Route>
           <Route exact path="/signup">
-            <SignupPage />
+            <SignupForm />
           </Route>
           <Route exact path="/">
             <Greetings />
           </Route>
           <Route exact path="/admin_signup">
-            <AdminSignupPage />
+            <AdminSignupForm />
           </Route>
           <Route exact path="/signout">
-            <Signout signout={this.signout} />
+            <SignOut signout={this.signout} />
           </Route>
           <PrivateRoute path="/classroom" />
         </Switch>
