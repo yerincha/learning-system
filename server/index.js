@@ -28,7 +28,7 @@ app.get('/user', (req, res) => {
   };
 
   if (req.query.id === '') {
-    if (req.session) {
+    if (req.session.dataValues.userId) {
       user.id = req.session.userId;
       db.User.findOne({
         where: {

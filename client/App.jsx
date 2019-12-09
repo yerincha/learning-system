@@ -1,14 +1,17 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { CssBaseline } from '@material-ui/core';
+import {
+  BrowserRouter as Router, Route, Switch, Redirect,
+} from 'react-router-dom';
 import axios from 'axios';
 
 import NavigationBar from './components/NavigationBar.jsx';
 import Greetings from './components/Greetings.jsx';
-import SignupPage from "./components/signup/SignupPage.jsx";
-import AdminSignupPage from "./components/signup/AdminSignupPage.jsx";
-import LoginPage from "./components/login/LoginPage.jsx";
-import Signout from "./components/login/Signout.jsx"
-import Student from "./components/Student.jsx";
+import SignupPage from './components/signup/SignupPage.jsx';
+import AdminSignupPage from './components/signup/AdminSignupPage.jsx';
+import LoginPage from './components/login/LoginPage.jsx';
+import Signout from './components/login/Signout.jsx';
+import Student from './components/Student.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -16,9 +19,9 @@ class App extends React.Component {
     this.state = {
       loggedIn: false,
       userId: '',
-      course: [],
+      course: null,
       isAdmin: false,
-    }
+    };
     this.login = this.login.bind(this);
     this.signout = this.signout.bind(this);
     this.fetchUserData = this.fetchUserData.bind(this);
@@ -29,38 +32,39 @@ class App extends React.Component {
   }
 
   login(user) {
-    console.log('user', user)
+    console.log('user', user);
     this.setState({
       loggedIn: true,
       userId: user.id,
       isAdmin: user.admin,
-    },() => this.fetchUserData());
+    }, () => this.fetchUserData());
   }
 
   fetchUserData() {
-    const { loggedIn, userId, isAdmin } = this.state;
+    const { userId, isAdmin } = this.state;
     axios.get(`/user?id=${userId}`, { isAdmin })
-    .then((result) => {
-      if(result.status === 200) {
-        this.setState({
-          loggedIn: true,
-          userId: result.data.id,
-          isAdmin: result.data.admin,
-          course: result.data.course,
-        });
-      } 
-    })
+      .then((result) => {
+        if (result.status === 200) {
+          this.setState({
+            loggedIn: true,
+            userId: result.data.id,
+            isAdmin: result.data.admin,
+            course: result.data.course,
+          });
+        }
+      });
   }
 
   fetchCourseData() {
+    const { id, admin } = this.state;
     axios.get('/api/course', {
       params: {
-        id: this.state.id,
-        isAdmin: this.state.admin
-      }
+        id,
+        isAdmin: admin,
+      },
     })
       .then((courses) => {
-        console.log('courses', courses)
+        console.log('courses', courses);
         this.setState({
           course: courses,
         });
@@ -79,15 +83,20 @@ class App extends React.Component {
     const { loggedIn } = this.state;
 
     const PrivateRoute = ({ component: Component, ...rest }) => (
-      <Route {...rest} render={(props) => (
-        loggedIn
-          ? <Component {...props} />
-          : <Redirect to='/login' />
-      )} />
-    )
+      <Route
+        {...rest}
+        render={(props) => (
+          loggedIn
+            // ? <Component {...props} />
+            ? <Student {...props} />
+            : <Redirect to="/login" />
+        )}
+      />
+    );
 
     return (
       <Router>
+        <CssBaseline />
         <NavigationBar loggedIn={loggedIn} />
         <Switch>
           <Route exact path="/login">
@@ -99,16 +108,13 @@ class App extends React.Component {
           <Route exact path="/">
             <Greetings />
           </Route>
-          {/* <Route path="/classroom">
-            <Student />
-          </Route> */}
-          <Route exact path="/admin_signup" >
+          <Route exact path="/admin_signup">
             <AdminSignupPage />
           </Route>
-          <Route exact path="/signout" >
+          <Route exact path="/signout">
             <Signout signout={this.signout} />
           </Route>
-          <PrivateRoute path="/student" component={<Student />} />
+          <PrivateRoute path="/classroom" />
         </Switch>
       </Router>
     );
