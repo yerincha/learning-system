@@ -147,7 +147,6 @@ const SignupForm = () => {
                 label="Phone Number"
                 type="phone"
                 id="formatted-text-mask-input"
-                autoComplete="current-password"
                 onChange={handleChange('phone')}
                 value={values.textmask}
               />

@@ -20,7 +20,7 @@ const AdminSignup = () => {
     email: '',
     phone: '',
     passcode: '',
-    Admin: true,
+    admin: true,
     password: '',
     passwordConfirmation: '',
   });
@@ -46,7 +46,7 @@ const AdminSignup = () => {
         password: values.password,
         admin: values.admin,
       };
-      axios.post('/api/signup', data)
+      axios.post('/api/admin_signup', data)
         .then(() => {
           setSubmitted(true);
           alert('관리자 회원 가입을 환영합니다. 로그인 해 주세요.');
@@ -113,7 +113,7 @@ const AdminSignup = () => {
                 fullWidth
                 name="phone"
                 label="Phone Number"
-                type="password"
+                type="phone"
                 id="formatted-text-mask-input"
                 onChange={handleChange('phone')}
                 value={values.textmask}

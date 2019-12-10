@@ -7,7 +7,7 @@ import { CssBaseline } from '@material-ui/core';
 
 import NavigationBar from './components/NavigationBar';
 import Home from './components/Main/Home';
-import Viewer from './components/Main/Viewer';
+import Classroom from './components/Main/Classroom';
 import SignupForm from './components/SignForm/SignUpForm';
 import AdminSignupForm from './components/SignForm/AdminSignUpForm';
 import SignInForm from './components/SignForm/SignInForm';
@@ -87,7 +87,9 @@ class App extends React.Component {
 
 
   render() {
-    const { loggedIn, name, course, isAdmin } = this.state;
+    const {
+      loggedIn, name, course, isAdmin,
+    } = this.state;
 
     const PrivateRoute = ({ component: Component, ...rest }) => (
       <Route
@@ -95,7 +97,7 @@ class App extends React.Component {
         render={(props) => (
           loggedIn
             // ? <Component {...props} />
-            ? <Viewer {...props} />
+            ? <Classroom {...props} />
             : <Redirect to="/login" />
         )}
       />
@@ -113,7 +115,7 @@ class App extends React.Component {
             <SignupForm />
           </Route>
           <Route exact path="/">
-            <Home loggedIn={loggedIn} course={course} isAdmin={isAdmin} />
+            <Home loggedIn={loggedIn} course={course} isAdmin={isAdmin} adminName={name} />
           </Route>
           <Route exact path="/admin_signup">
             <AdminSignupForm />
@@ -121,7 +123,7 @@ class App extends React.Component {
           <Route exact path="/signout">
             <SignOut signout={this.signout} />
           </Route>
-          <PrivateRoute path="/classroom" />
+          <PrivateRoute path="/classroom" course={course} />
         </Switch>
       </Router>
     );

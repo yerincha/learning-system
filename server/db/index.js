@@ -47,7 +47,8 @@ const UserCourse = sequelize.define('userCourses', {
 
 const Course = sequelize.define('courses', {
   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
-  title: Sequelize.STRING,
+  title: Sequelize.TEXT,
+  summary: Sequelize.TEXT,
   updatedAt: Sequelize.DATE,
   createdAt: Sequelize.DATE,
   madeBy: Sequelize.STRING,

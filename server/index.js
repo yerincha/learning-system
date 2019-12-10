@@ -69,6 +69,7 @@ app.get('/user', (req, res) => {
           if (user.admin) {
             db.Course.findAll()
               .then((courses) => {
+                // console.log('courses', courses)
                 user.course = courses;
                 res.send(user).status(200);
               })

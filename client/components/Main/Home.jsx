@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import propTypes from 'prop-types';
+import Axios from 'axios';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,6 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Copyright from '../Copyright';
 import Body from './Body';
+import CourseCreator from './CourseCreator';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -30,9 +32,41 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Home = ({ loggedIn, course, isAdmin }) => {
+const Home = ({
+  loggedIn, course, isAdmin, adminName,
+}) => {
   const classes = useStyles();
+  const [title, setTitle] = useState('');
+  const [summary, setSummary] = useState('');
+  const [isClicked, setIsClicked] = useState(false);
 
+  const [values, setValues] = React.useState({
+    title: '',
+    summary: '',
+  });
+
+  const handleClick = () => {
+    setIsClicked(() => true);
+  };
+
+  const handleChange = (name) => (event) => {
+    setValues({
+      ...values,
+      [name]: event.target.value,
+    });
+  };
+
+  const onClose = (e) => {
+    e.preventDefault();
+    Axios.post('/api/course', { email: values.email, password: values.password })
+      .then((res) => {
+        console.log(res.data);
+        setIsClicked(() => false);
+      })
+      .catch(() => {
+        console.log('not valid');
+      });
+  };
   return (
     <div>
       <CssBaseline />
@@ -51,14 +85,22 @@ const Home = ({ loggedIn, course, isAdmin }) => {
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">
                 <Grid item>
-                  <Button variant="contained" color="primary">
-                    <Link color="inherit" href="https://github.com/codestates">Github Repositories</Link>
-                  </Button>
-                </Grid>
-                <Grid item>
-                  <Button variant="outlined" color="primary">
-                    Create New Course
-                  </Button>
+                  {isAdmin
+                    ? (
+                      <Button variant="outlined" color="primary" onClick={handleClick}>
+                        Create New Course
+                      </Button>
+                    )
+                    : (
+                      <Button variant="contained" color="primary">
+                        <Link color="inherit" href="https://github.com/codestates">
+                          Github Repositories
+                        </Link>
+                      </Button>
+                    )}
+                  {isClicked
+                    ? <CourseCreator isClicked={isClicked} handleChange={handleChange} onClose={onClose} />
+                    : null}
                 </Grid>
               </Grid>
             </div>
@@ -88,7 +130,7 @@ Home.propTypes = {
 };
 
 Home.defaultProps = {
-  course: [],
+  course: [0],
 };
 
 export default Home;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 
 import Card from '@material-ui/core/Card';
@@ -59,9 +60,11 @@ export default function CardGrid() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" color="primary">
-                      View
-                    </Button>
+                    <Link to="/classroom">
+                      <Button size="small" color="primary">
+                        View
+                      </Button>
+                    </Link>
                   </CardActions>
                 </Card>
               </Grid>
