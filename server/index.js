@@ -151,7 +151,7 @@ app.post('/api/signup', (req, res) => {
       return db.User.create(data);
     })
     .then((results) => {
-      console.log(results);
+      // console.log(results);
       const insertId = results.dataValues.id;
       return db.Session.update({ userId: insertId }, { where: { id: req.session.id } });
     })
@@ -203,7 +203,7 @@ app.post('/api/admin_signup', (req, res) => {
       return db.User.create(data);
     })
     .then((results) => {
-      console.log(results);
+      // console.log(results);
       const insertId = results.dataValues.id;
       return db.Session.update({ userId: insertId }, { where: { id: req.session.id } });
     })
@@ -269,6 +269,44 @@ app.get('/api/signout', (req, res) => db.Session.destroy({
   .error((error) => {
     res.status(500).send(error);
   }));
+
+
+// Course
+app.get('/api/course', (req, res) => {
+  console.log('request', req.query);
+  if (req.query.isAdmin) {
+    db.Course.findAll()
+      .then((data) => {
+        res.send(data).status(200);
+      })
+      .catch(() => {
+        res.sendStatus(500);
+      });
+  } else {
+    db.UserCourse.findAll({
+      where: {
+        id: req.query.id,
+      },
+    })
+      .then((data) => {
+        res.send(data).status(200);
+      })
+      .catch(() => {
+        res.sendStatus(500);
+      });
+  }
+});
+
+app.post('/api/course', (req, res) => {
+  console.log(req.body);
+  db.Course.create(req.body)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(() => {
+      res.sendStatus(500);
+    });
+});
 
 // listening port
 app.listen(port, () => {

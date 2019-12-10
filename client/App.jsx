@@ -26,6 +26,7 @@ class App extends React.Component {
     this.login = this.login.bind(this);
     this.signout = this.signout.bind(this);
     this.fetchUserData = this.fetchUserData.bind(this);
+    this.fetchCourseData = this.fetchCourseData.bind(this);
   }
 
   componentDidMount() {
@@ -60,17 +61,18 @@ class App extends React.Component {
   }
 
   fetchCourseData() {
-    const { id, admin } = this.state;
+    const { userId, isAdmin } = this.state;
+
     axios.get('/api/course', {
       params: {
-        id,
-        isAdmin: admin,
+        id: userId,
+        isAdmin,
       },
     })
       .then((courses) => {
         console.log('courses', courses);
         this.setState({
-          course: courses,
+          course: courses.data,
         });
       });
   }
@@ -115,7 +117,13 @@ class App extends React.Component {
             <SignupForm />
           </Route>
           <Route exact path="/">
-            <Home loggedIn={loggedIn} course={course} isAdmin={isAdmin} adminName={name} />
+            <Home
+              loggedIn={loggedIn}
+              course={course}
+              isAdmin={isAdmin}
+              adminName={name}
+              fetchCourseData={this.fetchCourseData}
+            />
           </Route>
           <Route exact path="/admin_signup">
             <AdminSignupForm />

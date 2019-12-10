@@ -33,11 +33,9 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Home = ({
-  loggedIn, course, isAdmin, adminName,
+  loggedIn, course, isAdmin, adminName, fetchCourseData,
 }) => {
   const classes = useStyles();
-  const [title, setTitle] = useState('');
-  const [summary, setSummary] = useState('');
   const [isClicked, setIsClicked] = useState(false);
 
   const [values, setValues] = React.useState({
@@ -56,15 +54,18 @@ const Home = ({
     });
   };
 
-  const onClose = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    Axios.post('/api/course', { email: values.email, password: values.password })
+    Axios.post('/api/course', {
+      title: values.title, summary: values.summary, madeBy: adminName, updatedBy: adminName,
+    })
       .then((res) => {
         console.log(res.data);
         setIsClicked(() => false);
+        fetchCourseData();
       })
       .catch(() => {
-        console.log('not valid');
+        // console.log('not valid');
       });
   };
   return (
@@ -99,7 +100,14 @@ const Home = ({
                       </Button>
                     )}
                   {isClicked
-                    ? <CourseCreator isClicked={isClicked} handleChange={handleChange} onClose={onClose} />
+                    ? (
+                      <CourseCreator
+                        isClicked={isClicked}
+                        handleChange={handleChange}
+                        onSubmit={onSubmit}
+                        fetchCourseData={fetchCourseData}
+                      />
+                    )
                     : null}
                 </Grid>
               </Grid>
@@ -126,11 +134,13 @@ const Home = ({
 Home.propTypes = {
   loggedIn: propTypes.bool.isRequired,
   isAdmin: propTypes.bool.isRequired,
-  course: propTypes.arrayOf(propTypes.number),
+  course: propTypes.arrayOf(propTypes.object),
+  adminName: propTypes.string.isRequired,
+  fetchCourseData: propTypes.func.isRequired,
 };
 
 Home.defaultProps = {
-  course: [0],
+  course: [],
 };
 
 export default Home;

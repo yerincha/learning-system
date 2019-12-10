@@ -10,16 +10,16 @@ const Body = ({ loggedIn, course, isAdmin }) => {
   if (!loggedIn) {
     content = <CourseRegister />;
   } else if (loggedIn && course.length >= 0 && !isAdmin) {
-    content = <CardGrid />;
+    content = <CardGrid course={course} />;
   } else if (loggedIn && isAdmin) {
-    content = <CardGridAdmin />;
+    content = <CardGridAdmin course={course} />;
   }
   return content;
 };
 
 Body.propTypes = {
   loggedIn: propTypes.bool.isRequired,
-  course: propTypes.arrayOf(propTypes.number),
+  course: propTypes.arrayOf(propTypes.object),
   isAdmin: propTypes.bool.isRequired,
 };
 
