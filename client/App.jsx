@@ -1,13 +1,13 @@
 import React from 'react';
-import { CssBaseline } from '@material-ui/core';
 import {
   BrowserRouter as Router, Route, Switch, Redirect,
 } from 'react-router-dom';
 import axios from 'axios';
+import { CssBaseline } from '@material-ui/core';
 
 import NavigationBar from './components/NavigationBar';
-import Greetings from './components/Greetings';
-import Student from './components/Student';
+import Home from './components/Main/Home';
+import Viewer from './components/Main/Viewer';
 import SignupForm from './components/SignForm/SignUpForm';
 import AdminSignupForm from './components/SignForm/AdminSignUpForm';
 import SignInForm from './components/SignForm/SignInForm';
@@ -19,8 +19,9 @@ class App extends React.Component {
     this.state = {
       loggedIn: false,
       userId: '',
-      course: null,
+      course: [],
       isAdmin: false,
+      name: '',
     };
     this.login = this.login.bind(this);
     this.signout = this.signout.bind(this);
@@ -32,23 +33,26 @@ class App extends React.Component {
   }
 
   login(user) {
-    // console.log('user', user);
+    // console.log('user', user.admin);
     this.setState({
       loggedIn: true,
       userId: user.id,
       isAdmin: user.admin,
-    }, () => this.fetchUserData());
+      name: user.name,
+    }, this.fetchUserData);
   }
 
   fetchUserData() {
     const { userId, isAdmin } = this.state;
     axios.get(`/user?id=${userId}`, { isAdmin })
       .then((result) => {
+        // console.log('data', result.data)
         if (result.status === 200) {
           this.setState({
             loggedIn: true,
             userId: result.data.id,
             isAdmin: result.data.admin,
+            name: result.data.name,
             course: result.data.course,
           });
         }
@@ -75,12 +79,15 @@ class App extends React.Component {
     axios.get('/api/signout');
     this.setState({
       loggedIn: false,
+      isAdmin: false,
+      userId: '',
+      name: '',
     });
   }
 
 
   render() {
-    const { loggedIn } = this.state;
+    const { loggedIn, name, course, isAdmin } = this.state;
 
     const PrivateRoute = ({ component: Component, ...rest }) => (
       <Route
@@ -88,7 +95,7 @@ class App extends React.Component {
         render={(props) => (
           loggedIn
             // ? <Component {...props} />
-            ? <Student {...props} />
+            ? <Viewer {...props} />
             : <Redirect to="/login" />
         )}
       />
@@ -97,7 +104,7 @@ class App extends React.Component {
     return (
       <Router>
         <CssBaseline />
-        <NavigationBar loggedIn={loggedIn} />
+        <NavigationBar name={name} loggedIn={loggedIn} />
         <Switch>
           <Route exact path="/login">
             <SignInForm login={this.login} loggedIn={loggedIn} />
@@ -106,7 +113,7 @@ class App extends React.Component {
             <SignupForm />
           </Route>
           <Route exact path="/">
-            <Greetings />
+            <Home loggedIn={loggedIn} course={course} isAdmin={isAdmin} />
           </Route>
           <Route exact path="/admin_signup">
             <AdminSignupForm />

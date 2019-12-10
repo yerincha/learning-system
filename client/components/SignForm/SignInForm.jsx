@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
+import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 import propTypes from 'prop-types';
 
-import { Redirect, Link } from 'react-router-dom';
 
 // material-ui
 import {
@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
-import Copyright from './Copyright';
+import Copyright from '../Copyright';
 import useStyles from './useStyles';
 
 const SignInForm = ({ loggedIn, login }) => {
@@ -34,6 +34,7 @@ const SignInForm = ({ loggedIn, login }) => {
     e.preventDefault();
     axios.post('/api/login', { email: values.email, password: values.password })
       .then((res) => {
+        console.log(res.data)
         login(res.data);
       })
       .catch(() => {

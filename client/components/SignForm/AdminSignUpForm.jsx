@@ -1,8 +1,7 @@
 /* eslint-disable no-alert */
 import React, { useState } from 'react';
-import axios from 'axios';
-
 import { Redirect, Link } from 'react-router-dom';
+import axios from 'axios';
 
 // material-ui
 import {
@@ -10,7 +9,7 @@ import {
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import useStyles from './useStyles';
-import Copyright from './Copyright';
+import Copyright from '../Copyright';
 
 const AdminSignup = () => {
   const classes = useStyles();

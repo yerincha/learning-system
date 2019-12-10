@@ -1,15 +1,15 @@
 /* eslint-disable no-alert */
 import React, { useState } from 'react';
+import { Redirect, Link } from 'react-router-dom';
 import axios from 'axios';
 
-import { Redirect, Link } from 'react-router-dom';
 // material-ui
 import {
   Avatar, Button, CssBaseline, TextField, Grid, Box, Typography, Container, MenuItem,
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
-import Copyright from './Copyright';
+import Copyright from '../Copyright';
 import useStyles from './useStyles';
 
 const cohorts = [
@@ -145,7 +145,7 @@ const SignupForm = () => {
                 fullWidth
                 name="phone"
                 label="Phone Number"
-                type="password"
+                type="phone"
                 id="formatted-text-mask-input"
                 autoComplete="current-password"
                 onChange={handleChange('phone')}

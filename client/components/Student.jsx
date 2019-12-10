@@ -2,14 +2,11 @@ import React, { Component } from 'react';
 import { Redirect } from "react-router-dom";
 
 
-class Student extends Component {
-  render() {
-    return (
-      <div>
-        <h1>강의실</h1> 
-      </div>
-    );
-  }
+const Student = () => {
+  return(
+    <div>Student</div>
+  )
 }
 
 export default Student;
+

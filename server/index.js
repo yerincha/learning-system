@@ -25,6 +25,7 @@ app.get('/user', (req, res) => {
     id: req.query.id,
     admin: req.body.isAdmin,
     course: null,
+    name: null,
   };
 
   if (req.query.id === '') {
@@ -37,6 +38,7 @@ app.get('/user', (req, res) => {
       })
         .then((data) => {
           user.admin = data.admin;
+          user.name = data.name;
         });
     } else {
       res.sendStatus(203);
@@ -54,18 +56,41 @@ app.get('/user', (req, res) => {
           res.sendStatus(500);
         });
     } else {
-      db.UserCourse.findAll({
+      db.User.findOne({
         where: {
-          userId: user.id,
+          id: user.id,
         },
       })
-        .then((result) => {
-          user.course = result;
-          res.send(user).status(200);
+        .then((data) => {
+          user.name = data.name;
+          user.admin = data.admin;
         })
-        .catch((err) => {
-          console.log(err);
-          res.sendStatus(500);
+        .then(() => {
+          if (user.admin) {
+            db.Course.findAll()
+              .then((courses) => {
+                user.course = courses;
+                res.send(user).status(200);
+              })
+              .catch(() => {
+                res.sendStatus(500);
+              });
+          } else {
+            db.UserCourse.findAll({
+              where: {
+                userId: user.id,
+              },
+            })
+              .then((result) => {
+                user.course = result;
+                // console.log('user back', user);
+                res.send(user).status(200);
+              })
+              .catch((err) => {
+                console.log(err);
+                res.sendStatus(500);
+              });
+          }
         });
     }
   }
@@ -212,7 +237,7 @@ app.post('/api/login', (req, res) => {
       return userId;
     })
     .then((data) => {
-      user = { id: data.dataValues.id, admin: data.dataValues.admin };
+      user = { id: data.dataValues.id, admin: data.dataValues.admin, name: data.dataValues.name };
       return utils.compareHash(password, data.password, data.salt);
     })
     .then((bool) => {
