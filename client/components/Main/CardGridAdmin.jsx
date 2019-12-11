@@ -1,9 +1,9 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
 import propTypes from 'prop-types';
 
 import {
-  Card, CardActions, CardContent, CardMedia, CssBaseline, Grid, Typography, Container,
+  Button, Card, CardActions, CardContent, CardMedia, CssBaseline, Grid, Typography, Container,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CardGridAdmin = ({ course }) => {
+const CardGridAdmin = ({ course, onViewClick }) => {
   const classes = useStyles();
 
   return (
@@ -36,7 +36,7 @@ const CardGridAdmin = ({ course }) => {
           {/* End hero unit */}
           <Grid container spacing={4}>
             {course.map((card) => (
-              <Grid item key={card} xs={12} sm={6} md={4}>
+              <Grid item key={card.id} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}
@@ -52,9 +52,11 @@ const CardGridAdmin = ({ course }) => {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small" color="primary">
-                      View
-                    </Button>
+                    <Link to="/classroom">
+                      <Button size="small" color="primary" onClick={() => onViewClick(card.id)}>
+                        View
+                      </Button>
+                    </Link>
                     <Button size="small" color="primary">
                       Edit
                     </Button>
@@ -71,6 +73,7 @@ const CardGridAdmin = ({ course }) => {
 
 CardGridAdmin.propTypes = {
   course: propTypes.arrayOf(propTypes.object),
+  onViewClick: propTypes.func.isRequired,
 };
 
 CardGridAdmin.defaultProps = {

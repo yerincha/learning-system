@@ -11,6 +11,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 
 const useStyles = makeStyles((theme) => ({
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+  },
   icon: {
     marginRight: theme.spacing(2),
   },
@@ -19,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 const NavigationBar = ({ name, loggedIn, signout }) => {
   const classes = useStyles();
   return (
-    <AppBar position="relative">
+    <AppBar className={classes.appBar} position="relative">
       <Toolbar>
         <CameraIcon className={classes.icon} />
         <Typography variant="h6" color="inherit" noWrap>
@@ -28,21 +31,21 @@ const NavigationBar = ({ name, loggedIn, signout }) => {
         {loggedIn
           ? (
             <div>
-              <Button disabled>
+              <Button color="default" disabled>
                 {name}
               </Button>
               <Link to="/signout" onClick={signout}>
-                <Button color="inherit">Sign Out</Button>
+                <Button color="default">Sign Out</Button>
               </Link>
             </div>
           )
           : (
             <div>
               <Link to="/login">
-                <Button color="inherit">Sign In</Button>
+                <Button color="default">Sign In</Button>
               </Link>
               <Link to="/signup">
-                <Button color="inherit">Sign Up</Button>
+                <Button color="default">Sign Up</Button>
               </Link>
             </div>
           )}
@@ -54,7 +57,7 @@ const NavigationBar = ({ name, loggedIn, signout }) => {
 NavigationBar.propTypes = {
   name: propTypes.string.isRequired,
   loggedIn: propTypes.bool.isRequired,
-  signout: propTypes.bool.isRequired,
+  signout: propTypes.func.isRequired,
 };
 
 export default NavigationBar;

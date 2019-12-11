@@ -53,12 +53,14 @@ const Course = sequelize.define('courses', {
   createdAt: Sequelize.DATE,
   madeBy: Sequelize.STRING,
   updatedBy: Sequelize.STRING,
+  image: Sequelize.STRING,
 });
 
 const Container = sequelize.define('containers', {
   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
   updatedAt: Sequelize.DATE,
   createdAt: Sequelize.DATE,
+  title: Sequelize.TEXT,
   courseId: {
     type: Sequelize.INTEGER,
     references: {
@@ -76,11 +78,12 @@ const Content = sequelize.define('content', {
   containerId: {
     type: Sequelize.INTEGER,
     references: {
-      model: 'courses',
+      model: 'containers',
       key: 'id',
     },
   },
-  data: Sequelize.JSON,
+  data: Sequelize.TEXT,
+  title: Sequelize.TEXT,
   published: { type: Sequelize.BOOLEAN, defaultValue: false },
 });
 
@@ -95,7 +98,7 @@ Course.hasMany(Container, { foreignKey: 'courseId' });
 Container.belongsTo(Course, { foreignKey: 'courseId' });
 
 Container.hasMany(Content, { foreignKey: 'containerId' });
-Content.belongsTo(Container, { foreignKey: 'containderId' });
+Content.belongsTo(Container, { foreignKey: 'containerId' });
 
 // to test the connection
 sequelize.authenticate()

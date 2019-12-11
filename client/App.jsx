@@ -22,15 +22,17 @@ class App extends React.Component {
       course: [],
       isAdmin: false,
       name: '',
+      selectedCourse: 0,
     };
     this.login = this.login.bind(this);
     this.signout = this.signout.bind(this);
     this.fetchUserData = this.fetchUserData.bind(this);
     this.fetchCourseData = this.fetchCourseData.bind(this);
+    this.onViewClick = this.onViewClick.bind(this);
   }
 
   componentDidMount() {
-    this.fetchUserData();
+    this.fetchUserData(this.fetchCourseData);
   }
 
   login(user) {
@@ -43,7 +45,7 @@ class App extends React.Component {
     }, this.fetchUserData);
   }
 
-  fetchUserData() {
+  fetchUserData(cb) {
     const { userId, isAdmin } = this.state;
     axios.get(`/user?id=${userId}`, { isAdmin })
       .then((result) => {
@@ -54,27 +56,37 @@ class App extends React.Component {
             userId: result.data.id,
             isAdmin: result.data.admin,
             name: result.data.name,
-            course: result.data.course,
+            // course: result.data.course,
           });
         }
+      })
+      .then(() => {
+        cb();
       });
   }
 
   fetchCourseData() {
     const { userId, isAdmin } = this.state;
 
-    axios.get('/api/course', {
+    axios.get('/api/courses', {
       params: {
         id: userId,
         isAdmin,
       },
     })
       .then((courses) => {
-        console.log('courses', courses);
+        console.log('courses', courses.data);
         this.setState({
           course: courses.data,
         });
       });
+  }
+
+  onViewClick(e) {
+    // e.preventDefault();
+    this.setState({
+      selectedCourse: e,
+    });
   }
 
   signout() {
@@ -84,31 +96,40 @@ class App extends React.Component {
       isAdmin: false,
       userId: '',
       name: '',
+      selectedCourse: 0,
     });
   }
 
 
   render() {
     const {
-      loggedIn, name, course, isAdmin,
+      loggedIn, name, course, isAdmin, selectedCourse,
     } = this.state;
 
-    const PrivateRoute = ({ component: Component, ...rest }) => (
-      <Route
-        {...rest}
-        render={(props) => (
-          loggedIn
-            // ? <Component {...props} />
-            ? <Classroom {...props} />
-            : <Redirect to="/login" />
-        )}
-      />
-    );
+    const PrivateRoute = () => {
+      console.log(course);
+      return (
+        <Route
+          render={() => (
+            loggedIn
+              ? (
+                <Classroom
+                  course={course}
+                  selectedCourse={selectedCourse}
+                  isAdmin={isAdmin}
+                  adminName={name}
+                />
+              )
+              : <Redirect to="/login" />
+          )}
+        />
+      );
+    };
 
     return (
       <Router>
         <CssBaseline />
-        <NavigationBar name={name} loggedIn={loggedIn} />
+        <NavigationBar name={name} loggedIn={loggedIn} signout={this.signout} />
         <Switch>
           <Route exact path="/login">
             <SignInForm login={this.login} loggedIn={loggedIn} />
@@ -123,6 +144,8 @@ class App extends React.Component {
               isAdmin={isAdmin}
               adminName={name}
               fetchCourseData={this.fetchCourseData}
+              selectedCourse={selectedCourse}
+              onViewClick={this.onViewClick}
             />
           </Route>
           <Route exact path="/admin_signup">
@@ -131,7 +154,7 @@ class App extends React.Component {
           <Route exact path="/signout">
             <SignOut signout={this.signout} />
           </Route>
-          <PrivateRoute path="/classroom" course={course} />
+          <PrivateRoute path="/classroom" />
         </Switch>
       </Router>
     );

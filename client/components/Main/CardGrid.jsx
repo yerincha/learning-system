@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CardGrid = ({ course }) => {
+const CardGrid = ({ course, onViewClick }) => {
   const classes = useStyles();
 
   return (
@@ -41,7 +41,7 @@ const CardGrid = ({ course }) => {
                 <Card className={classes.card}>
                   <CardMedia
                     className={classes.cardMedia}
-                    image="https://source.unsplash.com/random"
+                    image={course.image}
                     title="Image title"
                   />
                   <CardContent className={classes.cardContent}>
@@ -54,7 +54,7 @@ const CardGrid = ({ course }) => {
                   </CardContent>
                   <CardActions>
                     <Link to="/classroom">
-                      <Button size="small" color="primary">
+                      <Button size="small" color="primary" onClick={() => onViewClick(card.id)}>
                         View
                       </Button>
                     </Link>
@@ -71,6 +71,7 @@ const CardGrid = ({ course }) => {
 
 CardGrid.propTypes = {
   course: propTypes.arrayOf(propTypes.object),
+  onViewClick: propTypes.func.isRequired,
 };
 
 CardGrid.defaultProps = {

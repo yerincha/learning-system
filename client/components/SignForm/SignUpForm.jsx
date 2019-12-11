@@ -159,7 +159,7 @@ const SignupForm = () => {
                 select
                 label="Select your Cohort"
                 value={values.cohort}
-                onChange={handleChange}
+                onChange={handleChange('cohort')}
               >
                 {cohorts.map((option) => (
                   <MenuItem key={option} value={option}>

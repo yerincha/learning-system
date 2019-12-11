@@ -1,40 +1,125 @@
-import React from 'react';
+/* eslint-disable no-unused-expressions */
+import React, { useEffect, useState } from 'react';
+import propTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import TreeView from '@material-ui/lab/TreeView';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import TreeItem from '@material-ui/lab/TreeItem';
+import {
+  List, ListItem, ListItemSecondaryAction, IconButton, Hidden, Drawer
+} from '@material-ui/core';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import Axios from 'axios';
 
-const useStyles = makeStyles({
-  root: {
-    height: 216,
-    flexGrow: 1,
-    maxWidth: 400,
+import Container from './Container';
+import CourseCreator from './CourseCreator';
+
+const drawerWidth = 300;
+const useStyles = makeStyles((theme) => ({
+  menu: {
+    display: 'flex',
   },
-});
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  toolbar: theme.mixins.toolbar,
+  title: {
+    fontSize: '20px',
+  },
+}));
 
-export default function FileSystem({ course }) {
+
+const FileSystem = ({
+  course, selectedCourse, handleChange, onCourseSubmit,
+}) => {
   const classes = useStyles();
+  const [isClicked, setIsClicked] = useState(false);
+
+  const [selectedCourseData, setSelectedCourseData] = React.useState(null);
+
+  const fetchCourseContent = () => {
+    Axios.get(`/api/course?id=${selectedCourse}`)
+      .then((data) => {
+        console.log(data);
+        setSelectedCourseData(data.data);
+      });
+  };
+
+  useEffect(() => {
+    fetchCourseContent();
+  }, []);
+
+  const handleClick = () => {
+    setIsClicked(true);
+  };
+
+  const handleClose = () => {
+    setIsClicked(false);
+  };
+
+  console.log(selectedCourseData);
+
+  const listGenerate = () => (
+    <div>
+      {selectedCourseData === null
+        ? (<div />)
+        : selectedCourseData.map((container) => (
+          <Container key={container.title} container={container} />
+        ))}
+    </div>
+  );
 
   return (
-    <TreeView
-      className={classes.root}
-      defaultCollapseIcon={<ExpandMoreIcon />}
-      defaultExpandIcon={<ChevronRightIcon />}
-    >
-      <TreeItem nodeId="1" label="Applications">
-        <TreeItem nodeId="2" label="Calendar" />
-        <TreeItem nodeId="3" label="Chrome" />
-        <TreeItem nodeId="4" label="Webstorm" />
-      </TreeItem>
-      <TreeItem nodeId="5" label="Documents">
-        <TreeItem nodeId="6" label="Material-UI">
-          <TreeItem nodeId="7" label="src">
-            <TreeItem nodeId="8" label="index.js" />
-            <TreeItem nodeId="9" label="tree-view.js" />
-          </TreeItem>
-        </TreeItem>
-      </TreeItem>
-    </TreeView>
+    <div className={classes.menu}>
+      <Drawer
+        className={classes.drawer}
+        variant="permanent"
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
+      >
+        <div>
+          <br />
+          <br />
+          <br />
+          <br />
+          <List className={classes.toolbar}>
+            <ListItem className={classes.title} button>
+              {course[0].title}
+            </ListItem>
+            <ListItemSecondaryAction>
+              <IconButton edge="end" aria-label="edit" size="medium" onClick={handleClick}>
+                <AddCircleOutlineIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </List>
+          {listGenerate()}
+          {isClicked
+            ? (
+              <CourseCreator
+                isClicked={isClicked}
+                handleChange={handleChange}
+                onSubmit={onCourseSubmit}
+                handleClose={handleClose}
+              />
+            )
+            : null}
+        </div>
+      </Drawer>
+    </div>
   );
-}
+};
+
+FileSystem.propTypes = {
+  course: propTypes.arrayOf(propTypes.object),
+  selectedCourse: propTypes.number.isRequired,
+  handleChange: propTypes.func.isRequired,
+  onCourseSubmit: propTypes.func.isRequired,
+};
+
+FileSystem.defaultProps = {
+  course: [],
+};
+
+export default FileSystem;

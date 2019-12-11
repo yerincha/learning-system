@@ -42,7 +42,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CourseCreator = ({ handleChange, onSubmit, isClicked }) => {
+const CourseCreator = ({
+  handleChange, onSubmit, isClicked, handleClose,
+}) => {
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
 
@@ -52,6 +54,7 @@ const CourseCreator = ({ handleChange, onSubmit, isClicked }) => {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
         open={isClicked}
+        onClose={handleClose}
       >
         <div style={modalStyle} className={classes.paper}>
           <h2 id="simple-modal-title">New Course</h2>
@@ -90,6 +93,7 @@ CourseCreator.propTypes = {
   handleChange: propTypes.func.isRequired,
   onSubmit: propTypes.func.isRequired,
   isClicked: propTypes.bool.isRequired,
+  handleClose: propTypes.func.isRequired,
 };
 
 export default CourseCreator;

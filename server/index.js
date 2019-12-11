@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
@@ -5,6 +6,7 @@ const cors = require('cors');
 const Auth = require('./middleware/auth');
 const db = require('./db/index');
 const utils = require('./lib/hashUtils');
+
 
 const app = express();
 const port = 3000;
@@ -272,11 +274,17 @@ app.get('/api/signout', (req, res) => db.Session.destroy({
 
 
 // Course
-app.get('/api/course', (req, res) => {
-  console.log('request', req.query);
+app.get('/api/courses', (req, res) => {
+  const returningCourses = [];
   if (req.query.isAdmin) {
+    // find all course
     db.Course.findAll()
       .then((data) => {
+        data.map((courseData) => returningCourses.push(courseData.dataValues));
+        return returningCourses;
+      })
+      .then((data) => {
+        console.log(`Loaded courses: ${data}`);
         res.send(data).status(200);
       })
       .catch(() => {
@@ -306,6 +314,74 @@ app.post('/api/course', (req, res) => {
     .catch(() => {
       res.sendStatus(500);
     });
+});
+
+// find selected course
+
+// app.get('/api/course', (req, res) => {
+//   db.Course.findOne({
+//     where: {
+//       id: req.query.id,
+//     },
+//   })
+//     .then((course) => {
+//       console.log('select one course', course);
+//       res.send(course).status(200);
+//     })
+//     .catch(() => {
+//       res.sendStatus(500);
+//     });
+// });
+
+app.get('/api/course', (req, res) => {
+  db.Container.findAll({
+    where: {
+      courseId: req.query.id,
+    },
+  }).then((containers) => {
+    const containerIds = containers.reduce((acc, cur) => {
+      acc.push(cur.id);
+      return acc;
+    }, []);
+
+    // res.send(containers).status(200);
+
+    db.Content.findAll({
+      where: {
+        containerId: {
+          [Op.or]: containerIds,
+        },
+      },
+    }).then((contents) => {
+      const containerIdAndContentsObj = {};
+
+      for (let i = 0; i < contents.length; i += 1) {
+        const content = contents[i].dataValues;
+        if (containerIdAndContentsObj[content.containerId] === undefined) {
+          containerIdAndContentsObj[content.containerId] = [content];
+        } else {
+          containerIdAndContentsObj[content.containerId].push(content);
+        }
+      }
+
+
+      const newContainers = [];
+      for (let i = 0; i < containers.length; i += 1) {
+        const container = containers[i].dataValues;
+        container.contents = containerIdAndContentsObj[container.id];
+        newContainers.push(container);
+      }
+
+      console.log('NEW CONTAINERS');
+      console.log(newContainers);
+
+      res.send(newContainers).status(200);
+    }).catch(() => {
+      res.sendStatus(500);
+    });
+  }).catch(() => {
+    res.sendStatus(500);
+  });
 });
 
 // listening port

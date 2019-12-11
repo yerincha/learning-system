@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Home = ({
-  loggedIn, course, isAdmin, adminName, fetchCourseData,
+  loggedIn, course, isAdmin, adminName, fetchCourseData, selectedCourse, onViewClick,
 }) => {
   const classes = useStyles();
   const [isClicked, setIsClicked] = useState(false);
@@ -44,7 +44,11 @@ const Home = ({
   });
 
   const handleClick = () => {
-    setIsClicked(() => true);
+    setIsClicked(true);
+  };
+
+  const handleClose = () => {
+    setIsClicked(false);
   };
 
   const handleChange = (name) => (event) => {
@@ -57,7 +61,11 @@ const Home = ({
   const onSubmit = (e) => {
     e.preventDefault();
     Axios.post('/api/course', {
-      title: values.title, summary: values.summary, madeBy: adminName, updatedBy: adminName,
+      title: values.title,
+      summary: values.summary,
+      madeBy: adminName,
+      updatedBy: adminName,
+      image: 'https://source.unsplash.com/random',
     })
       .then((res) => {
         console.log(res.data);
@@ -106,6 +114,7 @@ const Home = ({
                         handleChange={handleChange}
                         onSubmit={onSubmit}
                         fetchCourseData={fetchCourseData}
+                        handleClose={handleClose}
                       />
                     )
                     : null}
@@ -114,7 +123,7 @@ const Home = ({
             </div>
           </Container>
         </div>
-        <Body loggedIn={loggedIn} course={course} isAdmin={isAdmin} />
+        <Body loggedIn={loggedIn} course={course} isAdmin={isAdmin} selectedCourse={selectedCourse} onViewClick={onViewClick} />
       </main>
       {/* Footer */}
       <footer className={classes.footer}>
@@ -137,6 +146,8 @@ Home.propTypes = {
   course: propTypes.arrayOf(propTypes.object),
   adminName: propTypes.string.isRequired,
   fetchCourseData: propTypes.func.isRequired,
+  selectedCourse: propTypes.number.isRequired,
+  onViewClick: propTypes.func.isRequired,
 };
 
 Home.defaultProps = {
