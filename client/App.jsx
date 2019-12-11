@@ -7,7 +7,7 @@ import { CssBaseline } from '@material-ui/core';
 
 import NavigationBar from './components/NavigationBar';
 import Home from './components/Main/Home';
-import Classroom from './components/Main/Classroom';
+import Classroom from './components/Main/Classroom/Classroom';
 import SignupForm from './components/SignForm/SignUpForm';
 import AdminSignupForm from './components/SignForm/AdminSignUpForm';
 import SignInForm from './components/SignForm/SignInForm';
@@ -23,6 +23,7 @@ class App extends React.Component {
       isAdmin: false,
       name: '',
       selectedCourse: 0,
+      selectedCourseItem: null,
     };
     this.login = this.login.bind(this);
     this.signout = this.signout.bind(this);
@@ -35,8 +36,11 @@ class App extends React.Component {
     this.fetchUserData(this.fetchCourseData);
   }
 
+  componentWillUnmount() {
+    this.updateCourseItem();
+  }
+
   login(user) {
-    // console.log('user', user.admin);
     this.setState({
       loggedIn: true,
       userId: user.id,
@@ -56,7 +60,6 @@ class App extends React.Component {
             userId: result.data.id,
             isAdmin: result.data.admin,
             name: result.data.name,
-            // course: result.data.course,
           });
         }
       })
@@ -66,7 +69,7 @@ class App extends React.Component {
   }
 
   fetchCourseData() {
-    const { userId, isAdmin } = this.state;
+    const { userId, isAdmin, selectedCourse } = this.state;
 
     axios.get('/api/courses', {
       params: {
@@ -78,14 +81,16 @@ class App extends React.Component {
         console.log('courses', courses.data);
         this.setState({
           course: courses.data,
+          selectedCourseItem: selectedCourse === 0 ? null : courses.data[selectedCourse - 1],
         });
       });
   }
 
   onViewClick(e) {
-    // e.preventDefault();
+    const { course } = this.state;
     this.setState({
       selectedCourse: e,
+      selectedCourseItem: course[e - 1],
     });
   }
 
@@ -103,11 +108,13 @@ class App extends React.Component {
 
   render() {
     const {
-      loggedIn, name, course, isAdmin, selectedCourse,
+      loggedIn, name, course, isAdmin, selectedCourse, selectedCourseItem,
     } = this.state;
 
     const PrivateRoute = () => {
-      console.log(course);
+      console.log('PrivateRoute for Classroom', course);
+      console.log('PrivateRoute for Classroom SelectedCourse', selectedCourse);
+      console.log('PrivateRoute for Classroom SelectedCourseItem', selectedCourseItem);
       return (
         <Route
           render={() => (
@@ -118,6 +125,8 @@ class App extends React.Component {
                   selectedCourse={selectedCourse}
                   isAdmin={isAdmin}
                   adminName={name}
+                  selectedCourseItem={selectedCourseItem}
+                  fetchCourseData={this.fetchCourseData}
                 />
               )
               : <Redirect to="/login" />

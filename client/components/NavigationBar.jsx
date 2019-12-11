@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     marginRight: theme.spacing(2),
   },
+  sign: {
+    align: 'right',
+  },
 }));
 
 const NavigationBar = ({ name, loggedIn, signout }) => {
@@ -26,29 +29,33 @@ const NavigationBar = ({ name, loggedIn, signout }) => {
       <Toolbar>
         <CameraIcon className={classes.icon} />
         <Typography variant="h6" color="inherit" noWrap>
-          Code States
+          <Link to='/'>
+            <Button>Code States</Button>
+          </Link>
         </Typography>
-        {loggedIn
-          ? (
-            <div>
-              <Button color="default" disabled>
-                {name}
-              </Button>
-              <Link to="/signout" onClick={signout}>
-                <Button color="default">Sign Out</Button>
-              </Link>
-            </div>
-          )
-          : (
-            <div>
-              <Link to="/login">
-                <Button color="default">Sign In</Button>
-              </Link>
-              <Link to="/signup">
-                <Button color="default">Sign Up</Button>
-              </Link>
-            </div>
-          )}
+        <div>
+          {loggedIn
+            ? (
+              <div>
+                <Button color="default" disabled>
+                  {name}
+                </Button>
+                <Link to="/signout" onClick={signout}>
+                  <Button color="default">Sign Out</Button>
+                </Link>
+              </div>
+            )
+            : (
+              <div>
+                <Link to="/login">
+                  <Button color="default">Sign In</Button>
+                </Link>
+                <Link to="/signup">
+                  <Button color="default">Sign Up</Button>
+                </Link>
+              </div>
+            )}
+        </div>
       </Toolbar>
     </AppBar>
   );

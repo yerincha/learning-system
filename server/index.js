@@ -316,22 +316,29 @@ app.post('/api/course', (req, res) => {
     });
 });
 
-// find selected course
+// Course update
 
-// app.get('/api/course', (req, res) => {
-//   db.Course.findOne({
-//     where: {
-//       id: req.query.id,
-//     },
-//   })
-//     .then((course) => {
-//       console.log('select one course', course);
-//       res.send(course).status(200);
-//     })
-//     .catch(() => {
-//       res.sendStatus(500);
-//     });
-// });
+app.put('/api/course', (req, res) => {
+  console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
+  console.log('req.body', req.body);
+  db.Course.update({
+    title: req.body.title,
+    summary: req.body.summary,
+    updatedBy: req.body.updatedBy,
+  }, {
+    where: {
+      id: req.body.id,
+    },
+  })
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(() => {
+      res.sendStatus(500);
+    });
+});
+
+// find selected course
 
 app.get('/api/course', (req, res) => {
   db.Container.findAll({
@@ -343,9 +350,6 @@ app.get('/api/course', (req, res) => {
       acc.push(cur.id);
       return acc;
     }, []);
-
-    // res.send(containers).status(200);
-
     db.Content.findAll({
       where: {
         containerId: {
@@ -382,6 +386,19 @@ app.get('/api/course', (req, res) => {
   }).catch(() => {
     res.sendStatus(500);
   });
+});
+
+// Container
+
+app.post('/api/container', (req, res) => {
+  console.log('create container', req.body);
+  db.Container.create(req.body)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(() => {
+      res.sendStatus(500);
+    });
 });
 
 // listening port

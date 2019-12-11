@@ -6,9 +6,8 @@ import {
   List,
   ListItem,
   Switch, Collapse,
-  ListItemText, ListItemSecondaryAction, IconButton, ListItemIcon,
+  ListItemText, ListItemSecondaryAction, IconButton,
 } from '@material-ui/core';
-import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import ExpandLess from '@material-ui/icons/ExpandLess';
@@ -30,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Container = ({ container }) => {
+const Container = ({ container, containerEditClick, contentEditClick }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const [checked, setChecked] = React.useState([]);
@@ -56,7 +55,7 @@ const Container = ({ container }) => {
           primary={container.title}
         />
         <ListItemSecondaryAction>
-          <IconButton edge="end" aria-label="edit" size="small">
+          <IconButton edge="end" aria-label="edit" size="small" onClick={containerEditClick}>
             <EditIcon />
           </IconButton>
           <IconButton edge="end" aria-label="delete" size="small">
@@ -68,13 +67,14 @@ const Container = ({ container }) => {
             onChange={handleToggle(container.id)}
             checked={checked.indexOf(container.id) !== -1}
             color="primary"
-          // inputProps={{ 'aria-labelledby': 'switch-list-label-hi' }}
           />
         </ListItemSecondaryAction>
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List>
-          {container.contents.map((content) => <Content key={content.title} content={content} />)}
+          { container.contents === undefined
+            ? <div />
+            : container.contents.map((content) => <Content key={content.title} content={content} contentEditClick={contentEditClick}/>)}
         </List>
       </Collapse>
     </List>

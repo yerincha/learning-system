@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Content = ({ content }) => {
+const Content = ({ content, contentEditClick }) => {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([]);
   const [dense, setDense] = React.useState(true);
@@ -37,7 +37,7 @@ const Content = ({ content }) => {
     <ListItem button className={classes.nested} dense={dense}>
       <ListItemText primary={content.title} />
       <ListItemSecondaryAction>
-        <IconButton edge="end" aria-label="edit" size="small">
+        <IconButton edge="end" aria-label="edit" size="small" onClick={contentEditClick}>
           <EditIcon />
         </IconButton>
         <IconButton edge="end" aria-label="delete" size="small">
