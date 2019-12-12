@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ContainerEdit = ({
-  handleChange, containerTitle, selectedCourseData, selectedContainer,
-  fetchCourseContent, adminName, fetchCourseData,
+  handleChange, containerTitle, selectedContainer,
+  adminName, fetchCourseData,
 }) => {
   const classes = useStyles();
 

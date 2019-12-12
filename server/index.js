@@ -24,79 +24,29 @@ app.use(Auth.createSession);
 // Load data from db
 
 app.get('/user', (req, res) => {
-  const user = {
-    id: req.query.id,
-    admin: req.body.isAdmin,
-    course: null,
-    name: null,
-  };
+  // console.log('GET user -> session', req.session);
+  if (!req.session.dataValues.userId) {
+    res.sendStatus(203);
+  } else {
+    const user = {
+      id: req.session.dataValues.userId,
+      admin: null,
+      name: null,
+    };
 
-  if (req.query.id === '') {
-    if (req.session.dataValues.userId) {
-      user.id = req.session.userId;
-      db.User.findOne({
-        where: {
-          id: user.id,
-        },
+    db.User.findOne({
+      where: {
+        id: user.id,
+      },
+    })
+      .then((loadedUser) => {
+        user.admin = loadedUser.admin;
+        user.name = loadedUser.name;
+        res.send(user).status(200);
       })
-        .then((data) => {
-          user.admin = data.admin;
-          user.name = data.name;
-        });
-    } else {
-      res.sendStatus(203);
-    }
-  }
-
-  if (user.id !== '') {
-    if (user.admin) {
-      db.Course.findAll()
-        .then((result) => {
-          user.course = result;
-          res.send(user).status(200);
-        })
-        .catch(() => {
-          res.sendStatus(500);
-        });
-    } else {
-      db.User.findOne({
-        where: {
-          id: user.id,
-        },
-      })
-        .then((data) => {
-          user.name = data.name;
-          user.admin = data.admin;
-        })
-        .then(() => {
-          if (user.admin) {
-            db.Course.findAll()
-              .then((courses) => {
-                // console.log('courses', courses)
-                user.course = courses;
-                res.send(user).status(200);
-              })
-              .catch(() => {
-                res.sendStatus(500);
-              });
-          } else {
-            db.UserCourse.findAll({
-              where: {
-                userId: user.id,
-              },
-            })
-              .then((result) => {
-                user.course = result;
-                // console.log('user back', user);
-                res.send(user).status(200);
-              })
-              .catch((err) => {
-                console.log(err);
-                res.sendStatus(500);
-              });
-          }
-        });
-    }
+      .catch(() => {
+        res.sendStatus(500);
+      });
   }
 });
 
@@ -144,17 +94,12 @@ app.post('/api/signup', (req, res) => {
     },
   })
     .tap((user) => {
-      // console.log(user);
       if (user) {
         throw user;
       }
     })
-    .then(() => {
-      console.log('creating');
-      return db.User.create(data);
-    })
+    .then(() => db.User.create(data))
     .then((results) => {
-      // console.log(results);
       const insertId = results.dataValues.id;
       return db.Session.update({ userId: insertId }, { where: { id: req.session.id } });
     })
@@ -162,8 +107,7 @@ app.post('/api/signup', (req, res) => {
       console.log('New Student signed up successfully');
       res.sendStatus(200);
     })
-    .catch((user) => {
-      console.log('catch', user);
+    .catch(() => {
       res.sendStatus(500);
     });
 });
@@ -171,8 +115,6 @@ app.post('/api/signup', (req, res) => {
 // Admin Sign up
 
 app.post('/api/admin_signup', (req, res) => {
-  // TODO: handle admin signup passcode
-
   const {
     name,
     email,
@@ -196,17 +138,12 @@ app.post('/api/admin_signup', (req, res) => {
     },
   })
     .tap((user) => {
-      // console.log(user);
       if (user) {
         throw user;
       }
     })
-    .then(() => {
-      console.log('creating');
-      return db.User.create(data);
-    })
+    .then(() => db.User.create(data))
     .then((results) => {
-      // console.log(results);
       const insertId = results.dataValues.id;
       return db.Session.update({ userId: insertId }, { where: { id: req.session.id } });
     })
@@ -214,13 +151,12 @@ app.post('/api/admin_signup', (req, res) => {
       console.log('New Admin signed up successfully');
       res.sendStatus(200);
     })
-    .catch((user) => {
-      console.log('catch', user);
+    .catch(() => {
       res.sendStatus(500);
     });
 });
 
-// log in
+// Sign in
 
 app.post('/api/login', (req, res) => {
   if (!req.body.email || !req.body.password) {
@@ -252,8 +188,7 @@ app.post('/api/login', (req, res) => {
       console.log('Successfully logged in!');
       res.send(user).status(200);
     })
-    .catch((err) => {
-      console.log('login error', err);
+    .catch(() => {
       res.sendStatus(500);
     });
 });
@@ -277,15 +212,13 @@ app.get('/api/signout', (req, res) => db.Session.destroy({
 // Course
 app.get('/api/courses', (req, res) => {
   const returningCourses = [];
-  if (req.query.isAdmin) {
-    // find all course
+  if (req.query.isAdmin === 'true') {
     db.Course.findAll()
       .then((data) => {
         data.map((courseData) => returningCourses.push(courseData.dataValues));
         return returningCourses;
       })
       .then((data) => {
-        console.log(`Loaded courses: ${data}`);
         res.send(data).status(200);
       })
       .catch(() => {
@@ -294,11 +227,29 @@ app.get('/api/courses', (req, res) => {
   } else {
     db.UserCourse.findAll({
       where: {
-        id: req.query.id,
+        userId: req.query.id,
       },
     })
       .then((data) => {
-        res.send(data).status(200);
+        const courseIds = data.reduce((acc, cur) => {
+          acc.push(cur.dataValues.courseId);
+          return acc;
+        }, []);
+
+        db.Course.findAll({
+          where: {
+            id: {
+              [Op.or]: courseIds,
+            },
+          },
+        })
+          .then((coursesData) => {
+            coursesData.map((courseData) => returningCourses.push(courseData.dataValues));
+            res.send(returningCourses).status(200);
+          })
+          .catch(() => {
+            res.sendStatus(500);
+          });
       })
       .catch(() => {
         res.sendStatus(500);
@@ -307,7 +258,6 @@ app.get('/api/courses', (req, res) => {
 });
 
 app.post('/api/course', (req, res) => {
-  console.log(req.body);
   db.Course.create(req.body)
     .then(() => {
       res.sendStatus(200);
@@ -320,8 +270,6 @@ app.post('/api/course', (req, res) => {
 // Course update
 
 app.put('/api/course', (req, res) => {
-  console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
-  console.log('req.body', req.body);
   db.Course.update({
     title: req.body.title,
     summary: req.body.summary,
@@ -376,10 +324,6 @@ app.get('/api/course', (req, res) => {
         container.contents = containerIdAndContentsObj[container.id];
         newContainers.push(container);
       }
-
-      console.log('NEW CONTAINERS');
-      console.log(newContainers);
-
       res.send(newContainers).status(200);
     }).catch(() => {
       res.sendStatus(500);
@@ -392,7 +336,6 @@ app.get('/api/course', (req, res) => {
 // Container
 
 app.post('/api/container', (req, res) => {
-  console.log('create container', req.body);
   db.Container.create(req.body)
     .then(() => {
       res.sendStatus(200);
@@ -405,7 +348,6 @@ app.post('/api/container', (req, res) => {
 // container update
 
 app.put('/api/container', (req, res) => {
-  // console.log('req.body', req.body);
   db.Container.update({
     title: req.body.title,
     updatedBy: req.body.updatedBy,
@@ -424,7 +366,6 @@ app.put('/api/container', (req, res) => {
 
 // New Content create
 app.post('/api/content', (req, res) => {
-  console.log('create content', req.body);
   db.Content.create(req.body)
     .then(() => {
       res.sendStatus(200);
@@ -436,7 +377,6 @@ app.post('/api/content', (req, res) => {
 
 // Content File Loading
 app.get('/api/content_file', (req, res) => {
-  console.log('query', req.query.id);
   fs.readFile(`server/content_files/${req.query.id}.md`, (err, data) => {
     if (err) {
       res.sendStatus(500);
@@ -448,7 +388,6 @@ app.get('/api/content_file', (req, res) => {
 
 // Content File Save
 app.post('/api/content_file', (req, res) => {
-  console.log('body', req.body);
   fs.writeFile(`server/content_files/${req.body.id}.md`, req.body.body, (err) => {
     if (err) {
       res.sendStatus(500);

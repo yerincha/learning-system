@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CourseEdit from './CourseEdit';
 import ContainerEdit from './ContainerEdit';
 import ContentEdit from './ContentEdit';
+import ContentView from './ContentView';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -18,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Editor = ({
   isCourseEditClick, isContainerEditClick, isContentEditClick, handleChange, fetchCourseContent,
-  courseTitle, courseSummary, containerTitle, contentTitle, content, selectedCourseData, 
-  selectedCourseItem, fetchCourseData, adminName, selectedContainer, selectedContent,
+  courseTitle, courseSummary, containerTitle, contentTitle, content, selectedCourseData,
+  selectedCourseItem, fetchCourseData, adminName, selectedContainer, selectedContent, isContentClicked,
 }) => {
   const renderContent = () => {
     if (isCourseEditClick) {
@@ -55,6 +56,12 @@ const Editor = ({
           content={content}
           selectedCourseData={selectedCourseData}
           adminName={adminName}
+          selectedContent={selectedContent}
+        />
+      );
+    } else if (isContentClicked) {
+      return (
+        <ContentView
           selectedContent={selectedContent}
         />
       );

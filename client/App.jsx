@@ -44,7 +44,7 @@ class App extends React.Component {
     });
   }
 
-  fetchUserData(cb) {
+  fetchUserData(callback) {
     const { userId, isAdmin } = this.state;
     axios.get(`/user?id=${userId}`, { isAdmin })
       .then((result) => {
@@ -59,7 +59,7 @@ class App extends React.Component {
         }
       })
       .then(() => {
-        cb();
+        callback();
       });
   }
 
@@ -107,11 +107,11 @@ class App extends React.Component {
       loggedIn, name, course, isAdmin, selectedCourse, selectedCourseItem,
     } = this.state;
 
-    const PrivateRoute = () => {
+    const PrivateRoute = () =>
       // console.log('PrivateRoute for Classroom', course);
       // console.log('PrivateRoute for Classroom SelectedCourse', selectedCourse);
       // console.log('PrivateRoute for Classroom SelectedCourseItem', selectedCourseItem);
-      return (
+      (
         <Route
           render={() => (
             loggedIn
@@ -128,8 +128,8 @@ class App extends React.Component {
               : <Redirect to="/login" />
           )}
         />
-      );
-    };
+      )
+      ;
 
     return (
       <Router>

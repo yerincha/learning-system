@@ -1,10 +1,9 @@
 /* eslint-disable no-empty */
 import React, { useState, useEffect } from 'react';
-import MdEditor from 'react-markdown-editor-lite';
 import MarkdownIt from 'markdown-it';
 import Axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Button } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import hljs from 'highlight.js';
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +30,6 @@ const ContentEdit = ({ selectedContent }) => {
   });
   const [contentBody, setContentBody] = useState('');
 
-  let mdEditor = null;
   const fetchContentBody = () => {
     Axios.get(`/api/content_file?id=${selectedContent.id}`)
       .then((res) => {
@@ -43,39 +41,19 @@ const ContentEdit = ({ selectedContent }) => {
       });
   };
 
-  const handleSaveClick = () => {
-    const body = mdEditor.getMdValue();
-    Axios.post('/api/content_file', {
-      body,
-      id: selectedContent.id,
-    })
-      .then(() => {
-        alert('File Saved!');
-      })
-      .catch(() => {
-        alert('Fail to save file!');
-      });
-  };
-
 
   useEffect(() => {
     fetchContentBody();
   });
+
+  const mdHtml = () => (mdParser.render(contentBody));
 
   console.log('changing?????', selectedContent);
   console.log('contentBody?', contentBody);
   return (
     <main className={classes.content}>
       <Typography paragraph>
-        <Button onClick={handleSaveClick}> SAVE </Button>
-        <MdEditor
-          // eslint-disable-next-line no-return-assign
-          ref={(node) => mdEditor = node}
-          value={contentBody}
-          renderHTML={(text) => mdParser.render(text)}
-          id={selectedContent.id}
-          style={{ height: '600px' }}
-        />
+        <p dangerouslySetInnerHTML={{ __html: mdHtml() }} />
       </Typography>
     </main>
   );

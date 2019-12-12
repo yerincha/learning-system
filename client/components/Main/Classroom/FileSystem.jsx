@@ -28,8 +28,8 @@ const useStyles = makeStyles((theme) => ({
 
 
 const FileSystem = ({
-  handleChange, onContainerSubmit, selectedCourseData,
-  selectedCourseItem, courseEditClick, containerEditClick, contentEditClick,
+  handleChange, onContainerSubmit, selectedCourseData, isAdmin,
+  selectedCourseItem, courseEditClick, containerEditClick, contentEditClick, contentBodyClick,
 }) => {
   const classes = useStyles();
   const [isContainerAddClicked, setIsContainerAddClicked] = useState(false);
@@ -52,6 +52,8 @@ const FileSystem = ({
             container={container}
             contentEditClick={contentEditClick}
             containerEditClick={containerEditClick}
+            contentBodyClick={contentBodyClick}
+            isAdmin={isAdmin}
           />
         ))}
     </div>
@@ -74,14 +76,26 @@ const FileSystem = ({
         <br />
         <br />
         <List className={classes.toolbar}>
-          <ListItem className={classes.title} button onClick={courseEditClick}>
-            {selectedCourseItem.title}
-          </ListItem>
-          <ListItemSecondaryAction>
-            <IconButton edge="end" aria-label="edit" size="medium" onClick={handleContainerAddClick}>
-              <AddCircleOutlineIcon />
-            </IconButton>
-          </ListItemSecondaryAction>
+          {isAdmin
+            ? (
+              <ListItem className={classes.title} button onClick={courseEditClick}>
+                {selectedCourseItem.title}
+              </ListItem>
+            )
+            : (
+              <ListItem className={classes.title}>
+                {selectedCourseItem.title}
+              </ListItem>
+            )}
+          {isAdmin
+            ? (
+              <ListItemSecondaryAction>
+                <IconButton edge="end" aria-label="edit" size="medium" onClick={handleContainerAddClick}>
+                  <AddCircleOutlineIcon />
+                </IconButton>
+              </ListItemSecondaryAction>
+            )
+            : null}
         </List>
         {listGenerate()}
         {isContainerAddClicked

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import propTypes from 'prop-types';
 import Axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
@@ -15,15 +15,16 @@ const Classroom = ({
   isAdmin, adminName, course, selectedCourse, selectedCourseItem, fetchCourseData,
 }) => {
   const classes = useStyles();
-  const [selectedCourseData, setSelectedCourseData] = React.useState(null);
-  const [selectedContainer, setSelectedContainer] = React.useState(null);
-  const [selectedContent, setSelectedContent] = React.useState(null);
+  const [selectedCourseData, setSelectedCourseData] = useState(null);
+  const [selectedContainer, setSelectedContainer] = useState(null);
+  const [selectedContent, setSelectedContent] = useState(null);
 
-  const [isCourseEditClick, setIsCourseEditClick] = React.useState(false);
-  const [isContainerEditClick, setIsContainerEditClick] = React.useState(false);
-  const [isContentEditClick, setIsContentEditClick] = React.useState(false);
+  const [isCourseEditClick, setIsCourseEditClick] = useState(false);
+  const [isContainerEditClick, setIsContainerEditClick] = useState(false);
+  const [isContentEditClick, setIsContentEditClick] = useState(false);
+  const [isContentClicked, setIsContentClicked] = useState(false);
 
-  const [values, setValues] = React.useState({
+  const [values, setValues] = useState({
     courseTitle: selectedCourseItem.title,
     courseSummary: selectedCourseItem.summary,
     containerTitle: '',
@@ -91,6 +92,14 @@ const Classroom = ({
     setIsContainerEditClick(false);
   };
 
+  const contentBodyClick = (e) => {
+    updateSelectedContent(e);
+    setIsContentClicked(true);
+    setIsContentEditClick(false);
+    setIsCourseEditClick(false);
+    setIsContainerEditClick(false);
+  };
+
   // TODO
   // Delete Item
   // const containerDeleteClick = () => {
@@ -119,8 +128,7 @@ const Classroom = ({
         containerEditClick={containerEditClick}
         contentEditClick={contentEditClick}
         selectedCourseItem={selectedCourseItem}
-        // updateSelectedContainer={updateSelectedContainer}
-        // updateSelectedContent={updateSelectedContent}
+        contentBodyClick={contentBodyClick}
       />
       <Editor
         handleChange={handleChange}
@@ -140,6 +148,7 @@ const Classroom = ({
         adminName={adminName}
         selectedContainer={selectedContainer}
         selectedContent={selectedContent}
+        isContentClicked={isContentClicked}
       />
     </div>
   );

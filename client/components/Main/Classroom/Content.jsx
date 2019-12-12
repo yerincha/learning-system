@@ -16,7 +16,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Content = ({ content, contentEditClick }) => {
+const Content = ({
+  content, contentEditClick, selectedContent, contentBodyClick, isAdmin,
+}) => {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([]);
   const [dense, setDense] = React.useState(true);
@@ -34,23 +36,27 @@ const Content = ({ content, contentEditClick }) => {
   };
 
   return (
-    <ListItem button className={classes.nested} dense={dense}>
+    <ListItem button className={classes.nested} dense={dense} onClick={() => contentBodyClick(content)}>
       <ListItemText primary={content.title} />
-      <ListItemSecondaryAction>
-        <IconButton edge="end" aria-label="edit" size="small" onClick={() => contentEditClick(content)}>
-          <EditIcon />
-        </IconButton>
-        <IconButton edge="end" aria-label="delete" size="small">
-          <DeleteIcon />
-        </IconButton>
-        <Switch
-          edge="end"
-          size="small"
-          onChange={handleToggle(content.id)}
-          checked={checked.indexOf(content.id) !== -1}
-          color="primary"
-        />
-      </ListItemSecondaryAction>
+      {isAdmin
+        ? (
+          <ListItemSecondaryAction>
+            <IconButton edge="end" aria-label="edit" size="small" onClick={() => contentEditClick(content)}>
+              <EditIcon />
+            </IconButton>
+            <IconButton edge="end" aria-label="delete" size="small">
+              <DeleteIcon />
+            </IconButton>
+            <Switch
+              edge="end"
+              size="small"
+              onChange={handleToggle(content.id)}
+              checked={checked.indexOf(content.id) !== -1}
+              color="primary"
+            />
+          </ListItemSecondaryAction>
+        )
+        : null}
     </ListItem>
 
   );

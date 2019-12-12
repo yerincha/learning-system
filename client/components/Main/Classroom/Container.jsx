@@ -29,7 +29,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Container = ({ container, containerEditClick, contentEditClick }) => {
+const Container = ({
+  container, containerEditClick, contentEditClick, contentBodyClick, isAdmin,
+}) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const [checked, setChecked] = React.useState([]);
@@ -54,27 +56,31 @@ const Container = ({ container, containerEditClick, contentEditClick }) => {
         <ListItemText
           primary={container.title}
         />
-        <ListItemSecondaryAction>
-          <IconButton edge="end" aria-label="edit" size="small" onClick={() => containerEditClick(container)}>
-            <EditIcon />
-          </IconButton>
-          <IconButton edge="end" aria-label="delete" size="small">
-            <DeleteIcon />
-          </IconButton>
-          <Switch
-            edge="end"
-            size="small"
-            onChange={handleToggle(container.id)}
-            checked={checked.indexOf(container.id) !== -1}
-            color="primary"
-          />
-        </ListItemSecondaryAction>
+        {isAdmin
+          ? (
+            <ListItemSecondaryAction>
+              <IconButton edge="end" aria-label="edit" size="small" onClick={() => containerEditClick(container)}>
+                <EditIcon />
+              </IconButton>
+              <IconButton edge="end" aria-label="delete" size="small">
+                <DeleteIcon />
+              </IconButton>
+              <Switch
+                edge="end"
+                size="small"
+                onChange={handleToggle(container.id)}
+                checked={checked.indexOf(container.id) !== -1}
+                color="primary"
+              />
+            </ListItemSecondaryAction>
+          )
+          : null}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List>
-          { container.contents === undefined
+          {container.contents === undefined
             ? <div />
-            : container.contents.map((content) => <Content key={content.title} content={content} contentEditClick={contentEditClick}/>)}
+            : container.contents.map((content) => <Content key={content.title} content={content} contentEditClick={contentEditClick} contentBodyClick={contentBodyClick} isAdmin={isAdmin} />)}
         </List>
       </Collapse>
     </List>

@@ -7,13 +7,16 @@ module.exports.createSession = (req, res, next) => {
   // check for session cookie
   Promise.resolve(req.cookies.cslms)
     .then((hash) => {
-      if (!hash) {
+      // console.log('Auth Middleware Received Cookie', hash);
+
+      if (hash === undefined) {
         // make a session
         throw hash;
       }
       // attemp load session from database
       return db.Session.findOne({ where: { hash } })
         .then((session) => {
+          // console.log('Auth Middleware Session Loaded', session);
           if (!session || !session.userId) {
             return session;
           }
@@ -33,6 +36,7 @@ module.exports.createSession = (req, res, next) => {
       return session;
     })
     .catch(() => {
+      // console.log('Auth Middleware No Cookie -> Create New Session');
       // make a session
       const createHash = () => {
         const data = utils.createRandom32String();
@@ -42,8 +46,11 @@ module.exports.createSession = (req, res, next) => {
 
       const newHash = createHash();
       return db.Session.create({ hash: newHash })
-        .then(() => db.Session.findOne({ hash: newHash }))
+        .then(() => db.Session.findOne({
+          where: { hash: newHash },
+        }))
         .then((session) => {
+          // console.log('Auth Middleware Load Session After Create New', session);
           res.cookie('cslms', newHash);
           return session;
         });
