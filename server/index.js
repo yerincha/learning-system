@@ -1,5 +1,6 @@
 const { Op } = require('sequelize');
 const express = require('express');
+const fs = require('fs');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -404,8 +405,7 @@ app.post('/api/container', (req, res) => {
 // container update
 
 app.put('/api/container', (req, res) => {
-  console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
-  console.log('req.body', req.body);
+  // console.log('req.body', req.body);
   db.Container.update({
     title: req.body.title,
     updatedBy: req.body.updatedBy,
@@ -422,7 +422,7 @@ app.put('/api/container', (req, res) => {
     });
 });
 
-// Content
+// New Content create
 app.post('/api/content', (req, res) => {
   console.log('create content', req.body);
   db.Content.create(req.body)
@@ -432,6 +432,30 @@ app.post('/api/content', (req, res) => {
     .catch(() => {
       res.sendStatus(500);
     });
+});
+
+// Content File Loading
+app.get('/api/content_file', (req, res) => {
+  console.log('query', req.query.id);
+  fs.readFile(`server/content_files/${req.query.id}.md`, (err, data) => {
+    if (err) {
+      res.sendStatus(500);
+      return;
+    }
+    res.send(data).status(200);
+  });
+});
+
+// Content File Save
+app.post('/api/content_file', (req, res) => {
+  console.log('body', req.body);
+  fs.writeFile(`server/content_files/${req.body.id}.md`, req.body.body, (err) => {
+    if (err) {
+      res.sendStatus(500);
+      return;
+    }
+    res.sendStatus(200);
+  });
 });
 
 
