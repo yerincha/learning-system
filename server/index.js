@@ -364,6 +364,50 @@ app.put('/api/container', (req, res) => {
     });
 });
 
+// container delete
+
+app.delete('/api/container', (req, res) => {
+  db.Content.findAll({
+    where: {
+      containerId: req.query.id,
+    },
+  })
+    .then((contents) => {
+      // Delete Files
+      const contentIds = contents.reduce((acc, cur) => {
+        acc.push(cur.dataValues.id);
+        return acc;
+      }, []);
+
+      contentIds.map((id) => {
+        const filePath = `server/content_files/${id}.md`;
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+        return null;
+      });
+
+      return db.Content.destroy({
+        where: {
+          id: {
+            [Op.or]: contentIds,
+          },
+        },
+      });
+    })
+    .then(() => db.Container.destroy({
+      where: {
+        id: req.query.id,
+      },
+    }))
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(() => {
+      res.sendStatus(500);
+    });
+});
+
 // New Content create
 app.post('/api/content', (req, res) => {
   db.Content.create(req.body)

@@ -1,5 +1,6 @@
 import React from 'react';
 import propTypes from 'prop-types';
+import Axios from 'axios';
 
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -49,6 +50,26 @@ const Container = ({
     }
     setChecked(newChecked);
   };
+
+  const handleContainerDelete = () => {
+    const isOkay = confirm('Do you want to delete this container?');
+    if (isOkay) {
+      Axios.delete('/api/container', {
+        params: {
+          id: container.id,
+        },
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            fetchCourseContent();
+          }
+        })
+        .catch(() => {
+          alert('Fail to delete container');
+        });
+    }
+  };
+
   return (
     <List key={container.title} className={classes.root}>
       <ListItem button onClick={handleClick}>
@@ -62,7 +83,7 @@ const Container = ({
               <IconButton edge="end" aria-label="edit" size="small" onClick={() => containerEditClick(container)}>
                 <EditIcon />
               </IconButton>
-              <IconButton edge="end" aria-label="delete" size="small">
+              <IconButton edge="end" aria-label="delete" size="small" onClick={handleContainerDelete}>
                 <DeleteIcon />
               </IconButton>
               <Switch
