@@ -380,9 +380,9 @@ app.get('/api/content_file', (req, res) => {
   fs.readFile(`server/content_files/${req.query.id}.md`, (err, data) => {
     if (err) {
       res.sendStatus(500);
-      return;
+    } else {
+      res.send(data).status(200);
     }
-    res.send(data).status(200);
   });
 });
 
@@ -395,6 +395,42 @@ app.post('/api/content_file', (req, res) => {
     }
     res.sendStatus(200);
   });
+});
+
+// Delete Content
+app.delete('/api/content', (req, res) => {
+  const filePath = `server/content_files/${req.query.id}.md`;
+  if (fs.existsSync(filePath)) {
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        res.sendStatus(500);
+      } else {
+        db.Content.destroy({
+          where: {
+            id: req.query.id,
+          },
+        })
+          .then(() => {
+            res.sendStatus(200);
+          })
+          .catch(() => {
+            res.sendStatus(500);
+          });
+      }
+    });
+  } else {
+    db.Content.destroy({
+      where: {
+        id: req.query.id,
+      },
+    })
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch(() => {
+        res.sendStatus(500);
+      });
+  }
 });
 
 

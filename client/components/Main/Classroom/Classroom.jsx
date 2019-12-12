@@ -43,7 +43,6 @@ const Classroom = ({
   const fetchCourseContent = () => {
     Axios.get(`/api/course?id=${selectedCourse}`)
       .then((data) => {
-        // console.log('fetched', data);
         setSelectedCourseData(data.data);
       });
   };
@@ -77,19 +76,21 @@ const Classroom = ({
     setIsCourseEditClick(true);
     setIsContainerEditClick(false);
     setIsContentEditClick(false);
+    setIsContentClicked(false);
   };
   const containerEditClick = (e) => {
     updateSelectedContainer(e);
     setIsContainerEditClick(true);
     setIsCourseEditClick(false);
     setIsContentEditClick(false);
+    setIsContentClicked(false);
   };
   const contentEditClick = (e) => {
-    console.log('contentEditClicked', e)
     updateSelectedContent(e);
     setIsContentEditClick(true);
     setIsCourseEditClick(false);
     setIsContainerEditClick(false);
+    setIsContentClicked(false);
   };
 
   const contentBodyClick = (e) => {

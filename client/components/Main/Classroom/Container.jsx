@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Container = ({
-  container, containerEditClick, contentEditClick, contentBodyClick, isAdmin,
+  container, containerEditClick, contentEditClick, contentBodyClick, isAdmin, fetchCourseContent,
 }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -80,7 +80,16 @@ const Container = ({
         <List>
           {container.contents === undefined
             ? <div />
-            : container.contents.map((content) => <Content key={content.title} content={content} contentEditClick={contentEditClick} contentBodyClick={contentBodyClick} isAdmin={isAdmin} />)}
+            : container.contents.map((content) => (
+              <Content
+                key={content.title}
+                content={content}
+                contentEditClick={contentEditClick}
+                contentBodyClick={contentBodyClick}
+                isAdmin={isAdmin}
+                fetchCourseContent={fetchCourseContent}
+              />
+            ))}
         </List>
       </Collapse>
     </List>

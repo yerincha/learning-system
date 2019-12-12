@@ -1,6 +1,6 @@
 import React from 'react';
 import propTypes from 'prop-types';
-
+import Axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   ListItem,
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Content = ({
-  content, contentEditClick, selectedContent, contentBodyClick, isAdmin,
+  content, contentEditClick, selectedContent, contentBodyClick, isAdmin, fetchCourseContent,
 }) => {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([]);
@@ -35,6 +35,25 @@ const Content = ({
     setChecked(newChecked);
   };
 
+  const handleDelete = () => {
+    const isOkay = confirm('Do you want to delete this content?');
+    if (isOkay) {
+      Axios.delete('/api/content', {
+        params: {
+          id: content.id,
+        },
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            fetchCourseContent();
+          }
+        })
+        .catch(() => {
+          alert('Failed to delete this content');
+        });
+    }
+  };
+
   return (
     <ListItem button className={classes.nested} dense={dense} onClick={() => contentBodyClick(content)}>
       <ListItemText primary={content.title} />
@@ -44,7 +63,7 @@ const Content = ({
             <IconButton edge="end" aria-label="edit" size="small" onClick={() => contentEditClick(content)}>
               <EditIcon />
             </IconButton>
-            <IconButton edge="end" aria-label="delete" size="small">
+            <IconButton edge="end" aria-label="delete" size="small" onClick={() => handleDelete()}>
               <DeleteIcon />
             </IconButton>
             <Switch

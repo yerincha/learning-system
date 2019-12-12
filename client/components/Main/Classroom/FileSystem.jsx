@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const FileSystem = ({
-  handleChange, onContainerSubmit, selectedCourseData, isAdmin,
+  handleChange, onContainerSubmit, selectedCourseData, isAdmin, fetchCourseContent,
   selectedCourseItem, courseEditClick, containerEditClick, contentEditClick, contentBodyClick,
 }) => {
   const classes = useStyles();
@@ -54,6 +54,7 @@ const FileSystem = ({
             containerEditClick={containerEditClick}
             contentBodyClick={contentBodyClick}
             isAdmin={isAdmin}
+            fetchCourseContent={fetchCourseContent}
           />
         ))}
     </div>
