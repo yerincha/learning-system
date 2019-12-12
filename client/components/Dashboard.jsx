@@ -1,3 +1,5 @@
+/* eslint-disable no-alert */
+/* eslint-disable no-else-return */
 import React from 'react';
 import propTypes from 'prop-types';
 import Axios from 'axios';
@@ -79,21 +81,29 @@ const Dashboard = () => {
 
   const generateCode = () => {
     const code = makeid(6);
-    Axios.post('/api/code', {
-      userId: selectedStudent,
-      courseId: selectedCourse,
-      code,
-    })
-      .then((res) => {
-        alert(`The unique code is ${res.data}`);
+    if (selectedStudent === null || selectedStudent === '') {
+      alert('Should select student');
+      return;
+    } else if (selectedCourse === null || selectedCourse === '') {
+      alert('Should select course');
+      return;
+    } else {
+      Axios.post('/api/code', {
+        userId: selectedStudent,
+        courseId: selectedCourse,
+        code,
       })
-      .catch((err) => {
-        if (err.response.status === 400) {
-          alert('Student is already invited to the course');
-        } else {
-          alert('Fail to generate unique code');
-        }
-      });
+        .then((res) => {
+          alert(`The unique code is ${res.data}`);
+        })
+        .catch((err) => {
+          if (err.response.status === 400) {
+            alert('Student is already invited to the course');
+          } else {
+            alert('Fail to generate unique code');
+          }
+        });
+    };
   };
 
   return (

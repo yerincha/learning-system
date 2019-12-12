@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ContentEdit = ({ selectedContent }) => {
+const ContentView = ({ selectedContent }) => {
   const classes = useStyles();
   const mdParser = new MarkdownIt({
     html: true,
@@ -59,8 +59,8 @@ const ContentEdit = ({ selectedContent }) => {
   );
 };
 
-ContentEdit.propTypes = {
+ContentView.propTypes = {
 
 };
 
-export default ContentEdit;
+export default ContentView;

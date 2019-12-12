@@ -16,10 +16,6 @@ const User = sequelize.define('users', {
     },
   },
   salt: Sequelize.STRING,
-  cohort: {
-    type: Sequelize.STRING,
-    allowNull: true,
-  },
   admin: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,

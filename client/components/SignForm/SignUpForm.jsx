@@ -12,12 +12,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Copyright from '../Copyright';
 import useStyles from './useStyles';
 
-const cohorts = [
-  'Pre-Course 1기',
-  'Flex 1기',
-  'Immersive 1기',
-];
-
 const SignupForm = () => {
   const classes = useStyles();
   const [submitted, setSubmitted] = useState(false);
@@ -26,7 +20,6 @@ const SignupForm = () => {
     lastname: '',
     email: '',
     phone: '',
-    cohort: '',
     password: '',
     Admin: false,
     passwordConfirmation: '',
@@ -48,7 +41,6 @@ const SignupForm = () => {
         name: values.lastname + values.firstname,
         email: values.email,
         phone: values.phone,
-        cohort: values.cohort,
         password: values.password,
         admin: values.admin,
       };
@@ -150,23 +142,6 @@ const SignupForm = () => {
                 onChange={handleChange('phone')}
                 value={values.textmask}
               />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                id="cohort"
-                fullWidth
-                select
-                label="Select your Cohort"
-                value={values.cohort}
-                onChange={handleChange('cohort')}
-              >
-                {cohorts.map((option) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
-                  </MenuItem>
-                ))}
-              </TextField>
             </Grid>
           </Grid>
           <Button

@@ -50,20 +50,6 @@ app.get('/user', (req, res) => {
   }
 });
 
-app.get('/student', (req, res) => {
-  db.StudentCourse.findAll({
-    where: {
-      studentId: req.query.id,
-    },
-  })
-    .then((result) => {
-      res.send(result);
-    })
-    .catch(() => {
-      res.sendStatus(500);
-    });
-});
-
 // Load All Students
 
 app.get('/api/student_all', (req, res) => {
@@ -91,7 +77,6 @@ app.post('/api/signup', (req, res) => {
     email,
     phone,
     password,
-    cohort,
   } = req.body;
   const salt = utils.createRandom32String();
   const data = {
@@ -101,7 +86,6 @@ app.post('/api/signup', (req, res) => {
     password: utils.createHash(password, salt),
     admin: false,
     salt,
-    cohort,
   };
 
   return db.User.findOne({
@@ -144,7 +128,6 @@ app.post('/api/admin_signup', (req, res) => {
     phone,
     password: utils.createHash(password, salt),
     admin: true,
-    cohort: null,
     salt,
   };
 

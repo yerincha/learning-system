@@ -68,13 +68,12 @@ const Home = ({
       updatedBy: adminName,
       image: 'https://source.unsplash.com/random',
     })
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
         setIsClicked(() => false);
         fetchCourseData();
       })
       .catch(() => {
-        // console.log('not valid');
+        alert('Failed to load courses');
       });
   };
   return (

@@ -31,6 +31,9 @@ const CourseRegister = ({ userId, fetchCourseData }) => {
 
   const register = (e) => {
     e.preventDefault();
+    if (codeField === null || codeField.trim().length === 0 || codeField === undefined) {
+      return alert('Invalid code, please check your code');
+    }
     Axios.put('/api/register', {
       userId,
       code: codeField,

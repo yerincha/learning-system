@@ -31,12 +31,11 @@ const CourseEdit = ({
       updatedBy: adminName,
       id: selectedCourseItem.id,
     })
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
         fetchCourseData();
       })
       .catch(() => {
-        console.log('Oh no');
+        alert('Failed to update course')
       });
   };
 
