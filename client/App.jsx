@@ -33,7 +33,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchUserData(this.fetchCourseData);
+    this.fetchUserData();
   }
 
   onViewClick(e) {
@@ -44,11 +44,11 @@ class App extends React.Component {
     });
   }
 
-  fetchUserData(callback) {
+  fetchUserData() {
     const { userId, isAdmin } = this.state;
+
     axios.get(`/user?id=${userId}`, { isAdmin })
       .then((result) => {
-        // console.log('data', result.data)
         if (result.status === 200) {
           this.setState({
             loggedIn: true,
@@ -59,13 +59,12 @@ class App extends React.Component {
         }
       })
       .then(() => {
-        callback();
+        this.fetchCourseData();
       });
   }
 
   fetchCourseData() {
     const { userId, isAdmin, selectedCourse } = this.state;
-
     axios.get('/api/courses', {
       params: {
         id: userId,
@@ -73,7 +72,6 @@ class App extends React.Component {
       },
     })
       .then((courses) => {
-        // console.log('courses', courses.data);
         this.setState({
           course: courses.data,
           selectedCourseItem: selectedCourse === 0 ? null : courses.data[selectedCourse - 1],
@@ -107,29 +105,24 @@ class App extends React.Component {
       loggedIn, name, course, isAdmin, selectedCourse, selectedCourseItem,
     } = this.state;
 
-    const PrivateRoute = () =>
-      // console.log('PrivateRoute for Classroom', course);
-      // console.log('PrivateRoute for Classroom SelectedCourse', selectedCourse);
-      // console.log('PrivateRoute for Classroom SelectedCourseItem', selectedCourseItem);
-      (
-        <Route
-          render={() => (
-            loggedIn
-              ? (
-                <Classroom
-                  course={course}
-                  selectedCourse={selectedCourse}
-                  isAdmin={isAdmin}
-                  adminName={name}
-                  selectedCourseItem={selectedCourseItem}
-                  fetchCourseData={this.fetchCourseData}
-                />
-              )
-              : <Redirect to="/login" />
-          )}
-        />
-      )
-      ;
+    const PrivateRoute = () => (
+      <Route
+        render={() => (
+          loggedIn
+            ? (
+              <Classroom
+                course={course}
+                selectedCourse={selectedCourse}
+                isAdmin={isAdmin}
+                adminName={name}
+                selectedCourseItem={selectedCourseItem}
+                fetchCourseData={this.fetchCourseData}
+              />
+            )
+            : <Redirect to="/login" />
+        )}
+      />
+    );
 
     return (
       <Router>
