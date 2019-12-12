@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import propTypes from 'prop-types';
 import Axios from 'axios';
 
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
-import Link from '@material-ui/core/Link';
+import Linkto from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
@@ -96,15 +97,22 @@ const Home = ({
                 <Grid item>
                   {isAdmin
                     ? (
-                      <Button variant="outlined" color="primary" onClick={handleClick}>
-                        Create New Course
-                      </Button>
+                      <div>
+                        <Link to="/dashboard">
+                          <Button variant="contained" color="primary">
+                            Dash Board
+                          </Button>
+                        </Link>
+                        <Button variant="outlined" color="primary" onClick={handleClick}>
+                          Create New Course
+                        </Button>
+                      </div>
                     )
                     : (
                       <Button variant="contained" color="primary">
-                        <Link color="inherit" href="https://github.com/codestates">
+                        <Linkto color="inherit" href="https://github.com/codestates">
                           Github Repositories
-                        </Link>
+                        </Linkto>
                       </Button>
                     )}
                   {isClicked

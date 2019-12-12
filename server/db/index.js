@@ -43,6 +43,8 @@ const Session = sequelize.define('sessions', {
 
 const UserCourse = sequelize.define('userCourses', {
   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+  code: Sequelize.TEXT,
+  signedUp: { type: Sequelize.BOOLEAN, defaultValue: false },
 });
 
 const Course = sequelize.define('courses', {
@@ -87,7 +89,6 @@ const Content = sequelize.define('content', {
   published: { type: Sequelize.BOOLEAN, defaultValue: false },
 });
 
-
 User.belongsToMany(Course, { through: UserCourse });
 Course.belongsToMany(User, { through: UserCourse });
 
@@ -109,13 +110,7 @@ sequelize.authenticate()
     console.error('Unable to connect to the database:', err);
   });
 
-
-User.sync();
-UserCourse.sync();
-Session.sync();
-Course.sync();
-Container.sync();
-Content.sync();
+sequelize.sync();
 
 module.exports = {
   User,

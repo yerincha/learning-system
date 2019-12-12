@@ -64,6 +64,22 @@ app.get('/student', (req, res) => {
     });
 });
 
+// Load All Students
+
+app.get('/api/student_all', (req, res) => {
+  db.User.findAll({
+    where: {
+      admin: 0,
+    },
+  })
+    .then((data) => {
+      const students = data.map((c) => c.dataValues);
+      res.send(students).status(200);
+    })
+    .catch(() => {
+      res.sendStatus(500);
+    });
+});
 
 // Sign up
 
@@ -338,6 +354,19 @@ app.get('/api/course', (req, res) => {
   });
 });
 
+// Load All Courses
+
+app.get('/api/course_all', (req, res) => {
+  db.Course.findAll()
+    .then((data) => {
+      const courses = data.map((c) => c.dataValues);
+      res.send(courses).status(200);
+    })
+    .catch(() => {
+      res.sendStatus(500);
+    });
+});
+
 // Delete Course
 app.delete('/api/course', (req, res) => {
   const courseId = req.query.id;
@@ -581,6 +610,37 @@ app.put('/api/content_published', (req, res) => {
     });
 });
 
+// Create User-Course passcode
+
+app.post('/api/code', (req, res) => {
+  db.UserCourse.findOne({
+    where: {
+      userId: req.body.userId,
+      courseId: req.body.courseId,
+    },
+  })
+    .then((data) => {
+      console.log('Generate UserCourse', data);
+      if (data !== null) {
+        res.sendStatus(400);
+      } else {
+        db.UserCourse.create({
+          code: req.body.code,
+          userId: req.body.userId,
+          courseId: req.body.courseId,
+        })
+          .then(() => {
+            res.send(req.body.code).status(200);
+          })
+          .catch(() => {
+            res.sendStatus(500);
+          });
+      }
+    })
+    .catch(() => {
+      res.sendStatus(500);
+    });
+});
 
 // listening port
 app.listen(port, () => {

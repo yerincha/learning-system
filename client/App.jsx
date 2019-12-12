@@ -12,6 +12,7 @@ import SignupForm from './components/SignForm/SignUpForm';
 import AdminSignupForm from './components/SignForm/AdminSignUpForm';
 import SignInForm from './components/SignForm/SignInForm';
 import SignOut from './components/SignForm/SignOut';
+import Dashboard from './components/Dashboard'
 
 class App extends React.Component {
   constructor(props) {
@@ -38,7 +39,6 @@ class App extends React.Component {
 
   onViewClick(e) {
     const { course } = this.state;
-    console.log('What is e?', e)
     this.setState({
       selectedCourse: e,
       selectedCourseItem: course[e],
@@ -160,6 +160,9 @@ class App extends React.Component {
             <SignOut signout={this.signout} />
           </Route>
           <PrivateRoute path="/classroom" />
+          <Route exact path="/dashboard">
+            <Dashboard />
+          </Route>
         </Switch>
       </Router>
     );
