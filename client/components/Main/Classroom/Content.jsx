@@ -37,7 +37,7 @@ const Content = ({ content, contentEditClick }) => {
     <ListItem button className={classes.nested} dense={dense}>
       <ListItemText primary={content.title} />
       <ListItemSecondaryAction>
-        <IconButton edge="end" aria-label="edit" size="small" onClick={contentEditClick}>
+        <IconButton edge="end" aria-label="edit" size="small" onClick={() => contentEditClick(content)}>
           <EditIcon />
         </IconButton>
         <IconButton edge="end" aria-label="delete" size="small">

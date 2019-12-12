@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 const Editor = ({
   isCourseEditClick, isContainerEditClick, isContentEditClick, handleChange, fetchCourseContent,
   courseTitle, courseSummary, containerTitle, contentTitle, content, selectedCourseData, 
-  selectedCourseItem, fetchCourseData, adminName, selectedContainer,
+  selectedCourseItem, fetchCourseData, adminName, selectedContainer, selectedContent,
 }) => {
   const renderContent = () => {
     if (isCourseEditClick) {
@@ -55,6 +55,7 @@ const Editor = ({
           content={content}
           selectedCourseData={selectedCourseData}
           adminName={adminName}
+          selectedContent={selectedContent}
         />
       );
     }

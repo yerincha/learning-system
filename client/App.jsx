@@ -36,10 +36,6 @@ class App extends React.Component {
     this.fetchUserData(this.fetchCourseData);
   }
 
-  componentWillUnmount() {
-    this.updateCourseItem();
-  }
-
   onViewClick(e) {
     const { course } = this.state;
     this.setState({

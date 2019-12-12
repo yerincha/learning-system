@@ -1,15 +1,34 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import MdEditor from 'react-markdown-editor-lite';
+import MarkdownIt from 'markdown-it';
 
-ContentEdit.propTypes = {
-  
+const ContentEdit = ({ selectedContent}) => {
+  const MOCK_DATA = 'Hello.\n\n * This is markdown.\n * It is fun\n * Love it or leave it.';
+  const mdParser = new MarkdownIt();
+
+  // handleEditorChange({ html, text }) {
+  //   console.log('handleEditorChange', html, text);
+  // }
+
+  const data = () => {
+    let result = '';
+    if(selectedContent.data) {
+      result = selectedContent.data;
+    }
+    return result;
+  }
+
+  return (
+    <MdEditor
+      value={data()}
+      renderHTML={(text) => mdParser.render(text)}
+    // onChange={this.handleEditorChange}
+    />
+  );
 };
 
-function ContentEdit(props) {
-  return (
-    <div></div>
-  );
-}
+ContentEdit.propTypes = {
+
+};
 
 export default ContentEdit;
-

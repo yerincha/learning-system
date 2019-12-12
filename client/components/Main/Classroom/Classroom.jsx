@@ -17,6 +17,8 @@ const Classroom = ({
   const classes = useStyles();
   const [selectedCourseData, setSelectedCourseData] = React.useState(null);
   const [selectedContainer, setSelectedContainer] = React.useState(null);
+  const [selectedContent, setSelectedContent] = React.useState(null);
+
   const [isCourseEditClick, setIsCourseEditClick] = React.useState(false);
   const [isContainerEditClick, setIsContainerEditClick] = React.useState(false);
   const [isContentEditClick, setIsContentEditClick] = React.useState(false);
@@ -66,6 +68,10 @@ const Classroom = ({
     setSelectedContainer(data);
   };
 
+  const updateSelectedContent = (data) => {
+    setSelectedContent(data);
+  };
+
   const courseEditClick = () => {
     setIsCourseEditClick(true);
     setIsContainerEditClick(false);
@@ -77,7 +83,9 @@ const Classroom = ({
     setIsCourseEditClick(false);
     setIsContentEditClick(false);
   };
-  const contentEditClick = () => {
+  const contentEditClick = (e) => {
+    console.log('contentEditClicked', e)
+    updateSelectedContent(e);
     setIsContentEditClick(true);
     setIsCourseEditClick(false);
     setIsContainerEditClick(false);
@@ -111,7 +119,8 @@ const Classroom = ({
         containerEditClick={containerEditClick}
         contentEditClick={contentEditClick}
         selectedCourseItem={selectedCourseItem}
-        updateSelectedContainer={updateSelectedContainer}
+        // updateSelectedContainer={updateSelectedContainer}
+        // updateSelectedContent={updateSelectedContent}
       />
       <Editor
         handleChange={handleChange}
@@ -130,6 +139,7 @@ const Classroom = ({
         fetchCourseData={fetchCourseData}
         adminName={adminName}
         selectedContainer={selectedContainer}
+        selectedContent={selectedContent}
       />
     </div>
   );
