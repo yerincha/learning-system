@@ -101,15 +101,6 @@ const Classroom = ({
     setIsContainerEditClick(false);
   };
 
-  // TODO
-  // Publish control
-  // const containerPublishToggle = () => {
-  // };
-  // const contentPublishToggle = () => {
-  // };
-
-  // console.log('classroom selected container', selectedContainer);
-
   return (
     <div className={classes.classroom}>
       <FileSystem
