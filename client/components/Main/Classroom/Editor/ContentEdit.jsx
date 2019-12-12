@@ -1,9 +1,11 @@
+/* eslint-disable no-empty */
 import React, { useState, useEffect } from 'react';
 import MdEditor from 'react-markdown-editor-lite';
 import MarkdownIt from 'markdown-it';
 import Axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Button } from '@material-ui/core';
+import hljs from 'highlight.js';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -14,7 +16,19 @@ const useStyles = makeStyles((theme) => ({
 
 const ContentEdit = ({ selectedContent }) => {
   const classes = useStyles();
-  const mdParser = new MarkdownIt();
+  const mdParser = new MarkdownIt({
+    html: true,
+    linkify: true,
+    typographer: true,
+    highlight(str, lang) {
+      if (lang && hljs.getLanguage(lang)) {
+        try {
+          return hljs.highlight(lang, str).value;
+        } catch (__) { }
+      }
+      return ''; // use external default escaping
+    },
+  });
   const [contentBody, setContentBody] = useState('');
   // handleEditorChange({ html, text }) {
   //   console.log('handleEditorChange', html, text);
