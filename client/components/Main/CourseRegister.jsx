@@ -3,6 +3,7 @@ import {
   Button, CssBaseline, TextField, Typography, Container,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -24,9 +25,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CourseRegister = () => {
+const CourseRegister = ({ userId, fetchCourseData }) => {
   const classes = useStyles();
+  const [codeField, setCodeField] = React.useState('');
 
+  const register = (e) => {
+    e.preventDefault();
+    Axios.put('/api/register', {
+      userId,
+      code: codeField,
+    })
+      .then(() => {
+        fetchCourseData();
+      })
+      .then(() => {
+        alert('Wecome to the new course');
+      })
+      .catch((err) => {
+        if (err.response.code === 400) {
+          alert('The code is wrong. Check it again');
+        } else {
+          alert('Something went wrong.');
+        }
+      });
+  };
+
+  const handleChange = (e) => {
+    setCodeField(e.target.value);
+  };
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -38,7 +64,7 @@ const CourseRegister = () => {
           관리자로부터 전달받은 코스 코드를 입력해주세요.
         </Typography>
 
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={register} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
@@ -48,6 +74,7 @@ const CourseRegister = () => {
             label="Course code"
             type="text"
             id="courseCode"
+            onChange={handleChange}
           />
           <Button
             type="submit"

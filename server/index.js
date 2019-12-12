@@ -244,6 +244,7 @@ app.get('/api/courses', (req, res) => {
     db.UserCourse.findAll({
       where: {
         userId: req.query.id,
+        signedUp: true,
       },
     })
       .then((data) => {
@@ -631,6 +632,42 @@ app.post('/api/code', (req, res) => {
         })
           .then(() => {
             res.send(req.body.code).status(200);
+          })
+          .catch(() => {
+            res.sendStatus(500);
+          });
+      }
+    })
+    .catch(() => {
+      res.sendStatus(500);
+    });
+});
+
+// course register
+app.put('/api/register', (req, res) => {
+  db.UserCourse.findOne({
+    where: {
+      userId: req.body.userId,
+      code: req.body.code,
+    },
+  })
+    .then((result) => {
+      if (!result) {
+        // No match found
+        res.sendStatus(400);
+      } else {
+        // Found Matching
+        db.UserCourse.update({
+          signedUp: true,
+        },
+        {
+          where: {
+            userId: req.body.userId,
+            code: req.body.code,
+          },
+        })
+          .then(() => {
+            res.sendStatus(200);
           })
           .catch(() => {
             res.sendStatus(500);

@@ -109,7 +109,7 @@ class App extends React.Component {
 
   render() {
     const {
-      loggedIn, name, course, isAdmin, selectedCourse, selectedCourseItem,
+      loggedIn, name, course, isAdmin, selectedCourse, selectedCourseItem, userId,
     } = this.state;
 
     const PrivateRoute = () => (
@@ -151,6 +151,7 @@ class App extends React.Component {
               fetchCourseData={this.fetchCourseData}
               selectedCourse={selectedCourse}
               onViewClick={this.onViewClick}
+              userId={userId}
             />
           </Route>
           <Route exact path="/admin_signup">

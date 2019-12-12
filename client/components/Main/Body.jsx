@@ -5,11 +5,11 @@ import CourseRegister from './CourseRegister';
 import CardGrid from './CardGrid';
 
 const Body = ({
-  loggedIn, course, isAdmin, selectedCourse, onViewClick, fetchCourseData,
+  loggedIn, course, isAdmin, selectedCourse, onViewClick, fetchCourseData, userId,
 }) => {
   let content = null;
   if (loggedIn && Object.keys(course).length === 0) {
-    content = <CourseRegister />;
+    content = <CourseRegister userId={userId} fetchCourseData={fetchCourseData} />;
   } else if (loggedIn) {
     content = (
       <CardGrid

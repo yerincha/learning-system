@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Home = ({
-  loggedIn, course, isAdmin, adminName, fetchCourseData, selectedCourse, onViewClick,
+  loggedIn, course, isAdmin, adminName, fetchCourseData, selectedCourse, onViewClick, userId,
 }) => {
   const classes = useStyles();
   const [isClicked, setIsClicked] = useState(false);
@@ -138,6 +138,7 @@ const Home = ({
           selectedCourse={selectedCourse}
           onViewClick={onViewClick}
           fetchCourseData={fetchCourseData}
+          userId={userId}
         />
       </main>
       {/* Footer */}
