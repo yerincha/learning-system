@@ -333,6 +333,67 @@ app.get('/api/course', (req, res) => {
   });
 });
 
+// Delete Course
+app.delete('/api/course', (req, res) => {
+  const courseId = req.query.id;
+  let containerIds = null;
+
+  db.Container.findAll({
+    where: {
+      courseId,
+    },
+  })
+    .then((containers) => {
+      containerIds = containers.map((container) => container.id);
+
+      return db.Content.findAll({
+        where: {
+          containerId: {
+            [Op.or]: containerIds,
+          },
+        },
+      });
+    })
+    .then((contents) => {
+      const contentIds = contents.map((content) => content.id);
+
+      contentIds.map((id) => {
+        const filePath = `server/content_files/${id}.md`;
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+        return null;
+      });
+
+      return db.Content.destroy({
+        where: {
+          id: {
+            [Op.or]: contentIds,
+          },
+        },
+      });
+    })
+    .then(() => db.Container.destroy({
+      where: {
+        id: {
+          [Op.or]: containerIds,
+        },
+      },
+    }))
+    .then(() => db.Course.destroy({
+      where: {
+        id: courseId,
+      },
+    }))
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(() => {
+      res.sendStatus(500);
+    });
+});
+
+
 // Container
 
 app.post('/api/container', (req, res) => {
@@ -351,7 +412,8 @@ app.put('/api/container', (req, res) => {
   db.Container.update({
     title: req.body.title,
     updatedBy: req.body.updatedBy,
-  }, {
+  },
+  {
     where: {
       id: req.body.id,
     },

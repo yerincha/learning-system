@@ -5,7 +5,7 @@ import CourseRegister from './CourseRegister';
 import CardGrid from './CardGrid';
 
 const Body = ({
-  loggedIn, course, isAdmin, selectedCourse, onViewClick,
+  loggedIn, course, isAdmin, selectedCourse, onViewClick, fetchCourseData,
 }) => {
   let content = null;
   if (loggedIn && course.length === 0) {
@@ -16,6 +16,8 @@ const Body = ({
         course={course}
         selectedCourse={selectedCourse}
         onViewClick={onViewClick}
+        isAdmin={isAdmin}
+        fetchCourseData={fetchCourseData}
       />
     );
   }

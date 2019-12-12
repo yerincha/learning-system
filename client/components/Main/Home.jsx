@@ -129,6 +129,7 @@ const Home = ({
           isAdmin={isAdmin}
           selectedCourse={selectedCourse}
           onViewClick={onViewClick}
+          fetchCourseData={fetchCourseData}
         />
       </main>
       {/* Footer */}
