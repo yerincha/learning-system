@@ -401,6 +401,40 @@ app.post('/api/container', (req, res) => {
     });
 });
 
+// container update
+
+app.put('/api/container', (req, res) => {
+  console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
+  console.log('req.body', req.body);
+  db.Container.update({
+    title: req.body.title,
+    updatedBy: req.body.updatedBy,
+  }, {
+    where: {
+      id: req.body.id,
+    },
+  })
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(() => {
+      res.sendStatus(500);
+    });
+});
+
+// Content
+app.post('/api/content', (req, res) => {
+  console.log('create content', req.body);
+  db.Content.create(req.body)
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(() => {
+      res.sendStatus(500);
+    });
+});
+
+
 // listening port
 app.listen(port, () => {
   console.log(`Listening port: ${port}`);

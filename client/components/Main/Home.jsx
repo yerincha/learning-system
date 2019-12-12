@@ -123,16 +123,22 @@ const Home = ({
             </div>
           </Container>
         </div>
-        <Body loggedIn={loggedIn} course={course} isAdmin={isAdmin} selectedCourse={selectedCourse} onViewClick={onViewClick} />
+        <Body
+          loggedIn={loggedIn}
+          course={course}
+          isAdmin={isAdmin}
+          selectedCourse={selectedCourse}
+          onViewClick={onViewClick}
+        />
       </main>
       {/* Footer */}
       <footer className={classes.footer}>
-        <Typography variant="h6" align="center" gutterBottom>
+        {/* <Typography variant="h6" align="center" gutterBottom>
           Footer
         </Typography>
         <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
           Something here to give the footer a purpose!
-        </Typography>
+        </Typography> */}
         <Copyright />
       </footer>
       {/* End footer */}

@@ -16,6 +16,7 @@ const Classroom = ({
 }) => {
   const classes = useStyles();
   const [selectedCourseData, setSelectedCourseData] = React.useState(null);
+  const [selectedContainer, setSelectedContainer] = React.useState(null);
   const [isCourseEditClick, setIsCourseEditClick] = React.useState(false);
   const [isContainerEditClick, setIsContainerEditClick] = React.useState(false);
   const [isContentEditClick, setIsContentEditClick] = React.useState(false);
@@ -39,7 +40,7 @@ const Classroom = ({
   const fetchCourseContent = () => {
     Axios.get(`/api/course?id=${selectedCourse}`)
       .then((data) => {
-        console.log('fetched', data);
+        // console.log('fetched', data);
         setSelectedCourseData(data.data);
       });
   };
@@ -55,33 +56,46 @@ const Classroom = ({
       updatedBy: adminName,
       courseId: selectedCourse,
     })
-      .then((res) => {
-        console.log('container submitted', res.data);
+      .then(() => {
+        // console.log('container submitted');
         fetchCourseContent();
       });
   };
 
+  const updateSelectedContainer = (data) => {
+    setSelectedContainer(data);
+  };
+
   const courseEditClick = () => {
     setIsCourseEditClick(true);
+    setIsContainerEditClick(false);
+    setIsContentEditClick(false);
   };
-  const containerEditClick = () => {
+  const containerEditClick = (e) => {
+    updateSelectedContainer(e);
     setIsContainerEditClick(true);
+    setIsCourseEditClick(false);
+    setIsContentEditClick(false);
   };
   const contentEditClick = () => {
     setIsContentEditClick(true);
+    setIsCourseEditClick(false);
+    setIsContainerEditClick(false);
   };
 
-  const containerDeleteClick = () => {
-  };
-  const contentDeleteClick = () => {
-  };
+  // TODO
+  // Delete Item
+  // const containerDeleteClick = () => {
+  // };
+  // const contentDeleteClick = () => {
+  // };
+  // Publish control
+  // const containerPublishToggle = () => {
+  // };
+  // const contentPublishToggle = () => {
+  // };
 
-  const containerPublishToggle = () => {
-  };
-  const contentPublishToggle = () => {
-  };
-
-  console.log('selecte', selectedCourseItem)
+  // console.log('classroom selected container', selectedContainer);
 
   return (
     <div className={classes.classroom}>
@@ -97,6 +111,7 @@ const Classroom = ({
         containerEditClick={containerEditClick}
         contentEditClick={contentEditClick}
         selectedCourseItem={selectedCourseItem}
+        updateSelectedContainer={updateSelectedContainer}
       />
       <Editor
         handleChange={handleChange}
@@ -114,7 +129,7 @@ const Classroom = ({
         selectedCourseItem={selectedCourseItem}
         fetchCourseData={fetchCourseData}
         adminName={adminName}
-        // updateCourseItem={updateCourseItem}
+        selectedContainer={selectedContainer}
       />
     </div>
   );
@@ -125,6 +140,12 @@ Classroom.propTypes = {
   selectedCourse: propTypes.number.isRequired,
   isAdmin: propTypes.bool.isRequired,
   adminName: propTypes.string.isRequired,
+  selectedCourseItem: propTypes.objectOf(propTypes.number),
+  fetchCourseData: propTypes.func.isRequired,
+};
+
+Classroom.defaultProps = {
+  selectedCourseItem: null,
 };
 
 export default Classroom;

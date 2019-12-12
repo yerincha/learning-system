@@ -1,12 +1,11 @@
 /* eslint-disable no-unused-expressions */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import propTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   List, ListItem, ListItemSecondaryAction, IconButton, Drawer,
 } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import Axios from 'axios';
 
 import Container from './Container';
 import ContainerCreator from './Editor/ContainerCreator';
@@ -35,7 +34,7 @@ const FileSystem = ({
   const classes = useStyles();
   const [isContainerAddClicked, setIsContainerAddClicked] = useState(false);
 
-  const handleClick = () => {
+  const handleContainerAddClick = () => {
     setIsContainerAddClicked(true);
   };
 
@@ -47,7 +46,14 @@ const FileSystem = ({
     <div>
       {selectedCourseData === null
         ? (<div />)
-        : selectedCourseData.map((container) => (<Container key={container.title} container={container} contentEditClick={contentEditClick} containerEditClick={containerEditClick} />))}
+        : selectedCourseData.map((container) => (
+          <Container
+            key={container.title}
+            container={container}
+            contentEditClick={contentEditClick}
+            containerEditClick={containerEditClick}
+          />
+        ))}
     </div>
   );
   return (
@@ -72,7 +78,7 @@ const FileSystem = ({
             {selectedCourseItem.title}
           </ListItem>
           <ListItemSecondaryAction>
-            <IconButton edge="end" aria-label="edit" size="medium" onClick={handleClick}>
+            <IconButton edge="end" aria-label="edit" size="medium" onClick={handleContainerAddClick}>
               <AddCircleOutlineIcon />
             </IconButton>
           </ListItemSecondaryAction>
@@ -95,16 +101,18 @@ const FileSystem = ({
 };
 
 FileSystem.propTypes = {
-  course: propTypes.arrayOf(propTypes.object),
   selectedCourseData: propTypes.arrayOf(propTypes.object),
   handleChange: propTypes.func.isRequired,
   onContainerSubmit: propTypes.func.isRequired,
+  selectedCourseItem: propTypes.objectOf(propTypes.string),
+  courseEditClick: propTypes.func.isRequired,
+  containerEditClick: propTypes.func.isRequired,
+  contentEditClick: propTypes.func.isRequired,
 };
 
 FileSystem.defaultProps = {
-  course: [],
-  // onContainerSubmit: null,
   selectedCourseData: null,
+  selectedCourseItem: null,
 };
 
 export default FileSystem;

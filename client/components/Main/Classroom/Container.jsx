@@ -55,7 +55,7 @@ const Container = ({ container, containerEditClick, contentEditClick }) => {
           primary={container.title}
         />
         <ListItemSecondaryAction>
-          <IconButton edge="end" aria-label="edit" size="small" onClick={containerEditClick}>
+          <IconButton edge="end" aria-label="edit" size="small" onClick={() => containerEditClick(container)}>
             <EditIcon />
           </IconButton>
           <IconButton edge="end" aria-label="delete" size="small">

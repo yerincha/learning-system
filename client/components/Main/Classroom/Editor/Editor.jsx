@@ -1,6 +1,6 @@
 /* eslint-disable no-else-return */
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+import propTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -18,8 +18,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Editor = ({
   isCourseEditClick, isContainerEditClick, isContentEditClick, handleChange, fetchCourseContent,
-  courseTitle, courseSummary, containerTitle, contentTitle, content, selectedCourseData, selectedCourseItem,
-  fetchCourseData, adminName, updateCourseItem,
+  courseTitle, courseSummary, containerTitle, contentTitle, content, selectedCourseData, 
+  selectedCourseItem, fetchCourseData, adminName, selectedContainer,
 }) => {
   const renderContent = () => {
     if (isCourseEditClick) {
@@ -32,7 +32,6 @@ const Editor = ({
           selectedCourseItem={selectedCourseItem}
           fetchCourseData={fetchCourseData}
           adminName={adminName}
-          // updateCourseItem={updateCourseItem}
         />
       );
     } else if (isContainerEditClick) {
@@ -43,6 +42,8 @@ const Editor = ({
           containerTitle={containerTitle}
           selectedCourseData={selectedCourseData}
           adminName={adminName}
+          selectedContainer={selectedContainer}
+          fetchCourseData={fetchCourseData}
         />
       );
     } else if (isContentEditClick) {
@@ -73,6 +74,26 @@ const Editor = ({
 };
 
 Editor.propTypes = {
+  isCourseEditClick: propTypes.bool.isRequired,
+  isContainerEditClick: propTypes.bool.isRequired,
+  isContentEditClick: propTypes.bool.isRequired,
+  handleChange: propTypes.func.isRequired,
+  fetchCourseContent: propTypes.func.isRequired,
+  courseTitle: propTypes.string.isRequired,
+  courseSummary: propTypes.string.isRequired,
+  containerTitle: propTypes.string.isRequired,
+  contentTitle: propTypes.string.isRequired,
+  content: propTypes.string.isRequired,
+  selectedCourseData: propTypes.arrayOf(propTypes.object),
+  selectedCourseItem: propTypes.objectOf(propTypes.string),
+  fetchCourseData: propTypes.func.isRequired,
+  adminName: propTypes.string.isRequired,
+  selectedContainer: propTypes.objectOf(propTypes.string),
+};
 
+Editor.defaultProps = {
+  selectedCourseData: null,
+  selectedCourseItem: null,
+  selectedContainer: null,
 };
 export default Editor;

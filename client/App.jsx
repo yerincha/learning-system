@@ -40,13 +40,12 @@ class App extends React.Component {
     this.updateCourseItem();
   }
 
-  login(user) {
+  onViewClick(e) {
+    const { course } = this.state;
     this.setState({
-      loggedIn: true,
-      userId: user.id,
-      isAdmin: user.admin,
-      name: user.name,
-    }, this.fetchUserData);
+      selectedCourse: e,
+      selectedCourseItem: course[e - 1],
+    });
   }
 
   fetchUserData(cb) {
@@ -78,7 +77,7 @@ class App extends React.Component {
       },
     })
       .then((courses) => {
-        console.log('courses', courses.data);
+        // console.log('courses', courses.data);
         this.setState({
           course: courses.data,
           selectedCourseItem: selectedCourse === 0 ? null : courses.data[selectedCourse - 1],
@@ -86,12 +85,13 @@ class App extends React.Component {
       });
   }
 
-  onViewClick(e) {
-    const { course } = this.state;
+  login(user) {
     this.setState({
-      selectedCourse: e,
-      selectedCourseItem: course[e - 1],
-    });
+      loggedIn: true,
+      userId: user.id,
+      isAdmin: user.admin,
+      name: user.name,
+    }, this.fetchUserData);
   }
 
   signout() {
@@ -112,9 +112,9 @@ class App extends React.Component {
     } = this.state;
 
     const PrivateRoute = () => {
-      console.log('PrivateRoute for Classroom', course);
-      console.log('PrivateRoute for Classroom SelectedCourse', selectedCourse);
-      console.log('PrivateRoute for Classroom SelectedCourseItem', selectedCourseItem);
+      // console.log('PrivateRoute for Classroom', course);
+      // console.log('PrivateRoute for Classroom SelectedCourse', selectedCourse);
+      // console.log('PrivateRoute for Classroom SelectedCourseItem', selectedCourseItem);
       return (
         <Route
           render={() => (
