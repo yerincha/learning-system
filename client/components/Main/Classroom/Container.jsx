@@ -35,20 +35,20 @@ const Container = ({
 }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-  const [checked, setChecked] = React.useState([]);
+  const [checked, setChecked] = React.useState(container.published);
   const handleClick = () => {
     setOpen(!open);
   };
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    setChecked(newChecked);
+  const handleToggle = () => {
+    setChecked((prev) => !prev);
+    Axios.put('/api/container_published', {
+      id: container.id,
+      published: !checked,
+    })
+      .catch(() => {
+        alert('Failed to update published');
+        setChecked((prev) => !prev);
+      });
   };
 
   const handleContainerDelete = () => {
@@ -89,8 +89,8 @@ const Container = ({
               <Switch
                 edge="end"
                 size="small"
-                onChange={handleToggle(container.id)}
-                checked={checked.indexOf(container.id) !== -1}
+                onChange={handleToggle}
+                checked={checked}
                 color="primary"
               />
             </ListItemSecondaryAction>

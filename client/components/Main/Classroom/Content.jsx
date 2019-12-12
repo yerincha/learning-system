@@ -20,19 +20,19 @@ const Content = ({
   content, contentEditClick, selectedContent, contentBodyClick, isAdmin, fetchCourseContent,
 }) => {
   const classes = useStyles();
-  const [checked, setChecked] = React.useState([]);
   const [dense, setDense] = React.useState(true);
+  const [checked, setChecked] = React.useState(content.published);
 
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-    setChecked(newChecked);
+  const handleToggle = () => {
+    setChecked((prev) => !prev);
+    Axios.put('/api/content_published', {
+      id: content.id,
+      published: !checked,
+    })
+      .catch(() => {
+        alert('Failed to update published');
+        setChecked((prev) => !prev);
+      });
   };
 
   const handleDelete = () => {
@@ -69,8 +69,8 @@ const Content = ({
             <Switch
               edge="end"
               size="small"
-              onChange={handleToggle(content.id)}
-              checked={checked.indexOf(content.id) !== -1}
+              onChange={handleToggle}
+              checked={checked}
               color="primary"
             />
           </ListItemSecondaryAction>

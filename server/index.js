@@ -475,6 +475,25 @@ app.delete('/api/container', (req, res) => {
     });
 });
 
+// Update Container Published
+
+app.put('/api/container_published', (req, res) => {
+  db.Container.update({
+    published: req.body.published,
+  },
+  {
+    where: {
+      id: req.body.id,
+    },
+  })
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(() => {
+      res.sendStatus(500);
+    });
+});
+
 // New Content create
 app.post('/api/content', (req, res) => {
   db.Content.create(req.body)
@@ -542,6 +561,24 @@ app.delete('/api/content', (req, res) => {
         res.sendStatus(500);
       });
   }
+});
+
+// Update Content Published
+app.put('/api/content_published', (req, res) => {
+  db.Content.update({
+    published: req.body.published,
+  },
+  {
+    where: {
+      id: req.body.id,
+    },
+  })
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(() => {
+      res.sendStatus(500);
+    });
 });
 
 
