@@ -16,10 +16,6 @@ const User = sequelize.define('users', {
     },
   },
   salt: Sequelize.STRING,
-  cohort: {
-    type: Sequelize.STRING,
-    allowNull: true,
-  },
   admin: {
     type: Sequelize.BOOLEAN,
     defaultValue: false,
@@ -43,21 +39,26 @@ const Session = sequelize.define('sessions', {
 
 const UserCourse = sequelize.define('userCourses', {
   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+  code: Sequelize.TEXT,
+  signedUp: { type: Sequelize.BOOLEAN, defaultValue: false },
 });
 
 const Course = sequelize.define('courses', {
   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
-  title: Sequelize.STRING,
+  title: Sequelize.TEXT,
+  summary: Sequelize.TEXT,
   updatedAt: Sequelize.DATE,
   createdAt: Sequelize.DATE,
   madeBy: Sequelize.STRING,
   updatedBy: Sequelize.STRING,
+  image: Sequelize.STRING,
 });
 
 const Container = sequelize.define('containers', {
   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
   updatedAt: Sequelize.DATE,
   createdAt: Sequelize.DATE,
+  title: Sequelize.TEXT,
   courseId: {
     type: Sequelize.INTEGER,
     references: {
@@ -75,14 +76,14 @@ const Content = sequelize.define('content', {
   containerId: {
     type: Sequelize.INTEGER,
     references: {
-      model: 'courses',
+      model: 'containers',
       key: 'id',
     },
   },
-  data: Sequelize.JSON,
+  data: Sequelize.TEXT,
+  title: Sequelize.TEXT,
   published: { type: Sequelize.BOOLEAN, defaultValue: false },
 });
-
 
 User.belongsToMany(Course, { through: UserCourse });
 Course.belongsToMany(User, { through: UserCourse });
@@ -94,7 +95,7 @@ Course.hasMany(Container, { foreignKey: 'courseId' });
 Container.belongsTo(Course, { foreignKey: 'courseId' });
 
 Container.hasMany(Content, { foreignKey: 'containerId' });
-Content.belongsTo(Container, { foreignKey: 'containderId' });
+Content.belongsTo(Container, { foreignKey: 'containerId' });
 
 // to test the connection
 sequelize.authenticate()
@@ -105,13 +106,7 @@ sequelize.authenticate()
     console.error('Unable to connect to the database:', err);
   });
 
-
-User.sync();
-UserCourse.sync();
-Session.sync();
-Course.sync();
-Container.sync();
-Content.sync();
+sequelize.sync();
 
 module.exports = {
   User,
