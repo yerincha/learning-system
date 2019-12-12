@@ -19,7 +19,7 @@ class App extends React.Component {
     this.state = {
       loggedIn: false,
       userId: '',
-      course: [],
+      course: {},
       isAdmin: false,
       name: '',
       selectedCourse: 0,
@@ -38,9 +38,10 @@ class App extends React.Component {
 
   onViewClick(e) {
     const { course } = this.state;
+    console.log('What is e?', e)
     this.setState({
       selectedCourse: e,
-      selectedCourseItem: course[e - 1],
+      selectedCourseItem: course[e],
     });
   }
 
@@ -71,10 +72,16 @@ class App extends React.Component {
         isAdmin,
       },
     })
-      .then((courses) => {
+      .then((res) => {
+        const loadedCourses = res.data;
+        const courseObj = loadedCourses.reduce((acc, cur) => {
+          acc[cur.id] = cur;
+          return acc;
+        }, {});
+
         this.setState({
-          course: courses.data,
-          selectedCourseItem: selectedCourse === 0 ? null : courses.data[selectedCourse - 1],
+          course: courseObj,
+          selectedCourseItem: selectedCourse === 0 ? null : courseObj[selectedCourse],
         });
       });
   }

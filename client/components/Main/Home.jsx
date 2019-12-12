@@ -150,7 +150,7 @@ const Home = ({
 Home.propTypes = {
   loggedIn: propTypes.bool.isRequired,
   isAdmin: propTypes.bool.isRequired,
-  course: propTypes.arrayOf(propTypes.object),
+  // course: propTypes.arrayOf(propTypes.object),
   adminName: propTypes.string.isRequired,
   fetchCourseData: propTypes.func.isRequired,
   selectedCourse: propTypes.number.isRequired,
@@ -158,7 +158,7 @@ Home.propTypes = {
 };
 
 Home.defaultProps = {
-  course: [],
+  // course: [],
 };
 
 export default Home;

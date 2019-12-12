@@ -47,7 +47,7 @@ const CardGrid = ({ course, onViewClick, isAdmin, fetchCourseData }) => {
           alert('Failed to delete this course');
         });
     }
-  }
+  };
 
   return (
     <div>
@@ -56,7 +56,7 @@ const CardGrid = ({ course, onViewClick, isAdmin, fetchCourseData }) => {
         <Container className={classes.cardGrid} maxWidth="md">
           {/* End hero unit */}
           <Grid container spacing={4}>
-            {course.map((card) => (
+            {Object.values(course).map((card) => (
               <Grid item key={card.id} xs={12} sm={6} md={4}>
                 <Card className={classes.card}>
                   <CardMedia
@@ -99,12 +99,12 @@ const CardGrid = ({ course, onViewClick, isAdmin, fetchCourseData }) => {
 };
 
 CardGrid.propTypes = {
-  course: propTypes.arrayOf(propTypes.object),
+  // course: propTypes.arrayOf(propTypes.object),
   onViewClick: propTypes.func.isRequired,
 };
 
 CardGrid.defaultProps = {
-  course: [],
+  // course: [],
 };
 
 export default CardGrid;

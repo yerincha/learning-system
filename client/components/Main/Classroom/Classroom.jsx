@@ -102,11 +102,6 @@ const Classroom = ({
   };
 
   // TODO
-  // Delete Item
-  // const containerDeleteClick = () => {
-  // };
-  // const contentDeleteClick = () => {
-  // };
   // Publish control
   // const containerPublishToggle = () => {
   // };
