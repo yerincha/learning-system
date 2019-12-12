@@ -47,15 +47,19 @@ const FileSystem = ({
       {selectedCourseData === null
         ? (<div />)
         : selectedCourseData.map((container) => (
-          <Container
-            key={container.title}
-            container={container}
-            contentEditClick={contentEditClick}
-            containerEditClick={containerEditClick}
-            contentBodyClick={contentBodyClick}
-            isAdmin={isAdmin}
-            fetchCourseContent={fetchCourseContent}
-          />
+          (isAdmin || container.published)
+            ? (
+              <Container
+                key={container.title}
+                container={container}
+                contentEditClick={contentEditClick}
+                containerEditClick={containerEditClick}
+                contentBodyClick={contentBodyClick}
+                isAdmin={isAdmin}
+                fetchCourseContent={fetchCourseContent}
+              />
+            )
+            : null
         ))}
     </div>
   );

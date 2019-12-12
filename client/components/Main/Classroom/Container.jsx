@@ -102,14 +102,17 @@ const Container = ({
           {container.contents === undefined
             ? <div />
             : container.contents.map((content) => (
-              <Content
-                key={content.title}
-                content={content}
-                contentEditClick={contentEditClick}
-                contentBodyClick={contentBodyClick}
-                isAdmin={isAdmin}
-                fetchCourseContent={fetchCourseContent}
-              />
+              (isAdmin || content.published) ? (
+                <Content
+                  key={content.title}
+                  content={content}
+                  contentEditClick={contentEditClick}
+                  contentBodyClick={contentBodyClick}
+                  isAdmin={isAdmin}
+                  fetchCourseContent={fetchCourseContent}
+                />
+              )
+                : null
             ))}
         </List>
       </Collapse>

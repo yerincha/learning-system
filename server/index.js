@@ -236,20 +236,24 @@ app.get('/api/courses', (req, res) => {
           return acc;
         }, []);
 
-        db.Course.findAll({
-          where: {
-            id: {
-              [Op.or]: courseIds,
+        if (courseIds.length === 0) {
+          res.send([]).status(200);
+        } else {
+          db.Course.findAll({
+            where: {
+              id: {
+                [Op.or]: courseIds,
+              },
             },
-          },
-        })
-          .then((coursesData) => {
-            coursesData.map((courseData) => returningCourses.push(courseData.dataValues));
-            res.send(returningCourses).status(200);
           })
-          .catch(() => {
-            res.sendStatus(500);
-          });
+            .then((coursesData) => {
+              coursesData.map((courseData) => returningCourses.push(courseData.dataValues));
+              res.send(returningCourses).status(200);
+            })
+            .catch(() => {
+              res.sendStatus(500);
+            });
+        }
       })
       .catch(() => {
         res.sendStatus(500);
@@ -274,7 +278,8 @@ app.put('/api/course', (req, res) => {
     title: req.body.title,
     summary: req.body.summary,
     updatedBy: req.body.updatedBy,
-  }, {
+  },
+  {
     where: {
       id: req.body.id,
     },
