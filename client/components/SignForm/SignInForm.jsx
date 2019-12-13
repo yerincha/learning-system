@@ -37,7 +37,6 @@ const SignInForm = ({ loggedIn, login }) => {
         login(res.data);
       })
       .catch(() => {
-        // console.log('not valid');
         setIsValid(false);
       });
   };
