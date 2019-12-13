@@ -621,7 +621,6 @@ app.post('/api/code', (req, res) => {
     },
   })
     .then((data) => {
-      console.log('Generate UserCourse', data);
       if (data !== null) {
         res.sendStatus(400);
       } else {

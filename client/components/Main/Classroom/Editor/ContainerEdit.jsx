@@ -50,15 +50,14 @@ const ContainerEdit = ({
       updatedBy: adminName,
       containerId: selectedContainer.id,
     })
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
         fetchCourseData();
       })
       .then(() => {
         alert('New Content is created');
       })
       .catch(() => {
-        console.log('Oh no');
+        alert('Fail to create new content');
       });
   };
 
