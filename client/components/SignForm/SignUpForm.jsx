@@ -32,6 +32,11 @@ const SignupForm = () => {
     return phoneRegExp.test(phoneNum);
   };
 
+  const isEmailValidate = (email) => {
+    const emailRegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return emailRegExp.test(String(email).toLowerCase());
+  };
+
   const handleChange = (name) => (event) => {
     if (name === 'phone') {
       const validationPhone = isCellPhoneValidate(event.target.value);
@@ -39,6 +44,13 @@ const SignupForm = () => {
         ...values,
         [name]: event.target.value,
         isPhoneValid: validationPhone,
+      });
+    } else if (name === 'email') {
+      const validationEmail = isEmailValidate(event.target.value);
+      setValues({
+        ...values,
+        [name]: event.target.value,
+        isEmailValid: validationEmail,
       });
     } else {
       setValues({
@@ -119,6 +131,8 @@ const SignupForm = () => {
                 name="email"
                 autoComplete="email"
                 onChange={handleChange('email')}
+                helperText={(values.isEmailValid ? '' : 'Invalid email address.')}
+                error={!values.isEmailValid}
               />
             </Grid>
             <Grid item xs={12}>
