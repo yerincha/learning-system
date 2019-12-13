@@ -7,7 +7,6 @@ import Axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
@@ -28,11 +27,6 @@ const Dashboard = () => {
   const [allStudent, setAllStudent] = React.useState(null);
   const [selectedCourse, setSelectedCourse] = React.useState(null);
   const [selectedStudent, setSelectedStudent] = React.useState(null);
-
-
-  const inputLabel = React.useRef(null);
-  const [labelWidth, setLabelWidth] = React.useState(0);
-
 
   const handleCourseChange = (event) => {
     setSelectedCourse(event.target.value);

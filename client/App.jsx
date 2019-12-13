@@ -12,7 +12,7 @@ import SignupForm from './components/SignForm/SignUpForm';
 import AdminSignupForm from './components/SignForm/AdminSignUpForm';
 import SignInForm from './components/SignForm/SignInForm';
 import SignOut from './components/SignForm/SignOut';
-import Dashboard from './components/Dashboard'
+import Dashboard from './components/Dashboard';
 
 class App extends React.Component {
   constructor(props) {
@@ -78,7 +78,7 @@ class App extends React.Component {
           acc[cur.id] = cur;
           return acc;
         }, {});
-
+        console.log(courseObj)
         this.setState({
           course: courseObj,
           selectedCourseItem: selectedCourse === 0 ? null : courseObj[selectedCourse],

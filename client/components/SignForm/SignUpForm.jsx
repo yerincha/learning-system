@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable no-alert */
 import React, { useState } from 'react';
 import { Redirect, Link } from 'react-router-dom';
@@ -5,7 +6,7 @@ import axios from 'axios';
 
 // material-ui
 import {
-  Avatar, Button, CssBaseline, TextField, Grid, Box, Typography, Container, MenuItem,
+  Avatar, Button, CssBaseline, TextField, Grid, Box, Typography, Container,
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
