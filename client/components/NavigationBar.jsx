@@ -46,7 +46,7 @@ const NavigationBar = ({ name, loggedIn, signout }) => {
     <AppBar className={classes.appBar} color="default" position="relative">
       <Toolbar>
         <Link to="/">
-          <Typography variant="h6" color="initial" className={classes.title} noWrap>
+          <Typography variant="h6" color="textPrimary" className={classes.title} noWrap>
             CODE STATES
           </Typography>
         </Link>
