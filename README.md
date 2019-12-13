@@ -43,7 +43,8 @@ $ npm start
 - you can create, edit, delete courses, containers, contents on the viewer.<br>
 - When you click 'view' on the grid, you can enter to the viewer.<br>
 - When you click the name of content, you can see the view mode of content for the student.<br>
-
+- **When you create a new content, the content will be saved on the '/server/content_files' directory
+  the name of file is an id of the content at the database. And when you edit, it will be overwrite.
 
 ### When you sign in with student account
 - You will see the form of the entering passcode for opening a new course on the main page.<br>
