@@ -3,12 +3,10 @@ import { Link } from 'react-router-dom';
 import propTypes from 'prop-types';
 import Axios from 'axios';
 
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
+import {
+  Button, CssBaseline, Grid, Typography, Container,
+} from '@material-ui/core';
 import Linkto from '@material-ui/core/Link';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Copyright from '../Copyright';
@@ -99,7 +97,7 @@ const Home = ({
                       <div>
                         <Link to="/dashboard">
                           <Button variant="contained" color="primary">
-                            Dash Board
+                            Go to Dash Board
                           </Button>
                         </Link>
                         <Button variant="outlined" color="primary" onClick={handleClick}>
@@ -140,17 +138,9 @@ const Home = ({
           userId={userId}
         />
       </main>
-      {/* Footer */}
       <footer className={classes.footer}>
-        {/* <Typography variant="h6" align="center" gutterBottom>
-          Footer
-        </Typography>
-        <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-          Something here to give the footer a purpose!
-        </Typography> */}
         <Copyright />
       </footer>
-      {/* End footer */}
     </div>
   );
 };
@@ -158,15 +148,16 @@ const Home = ({
 Home.propTypes = {
   loggedIn: propTypes.bool.isRequired,
   isAdmin: propTypes.bool.isRequired,
-  // course: propTypes.arrayOf(propTypes.object),
+  course: propTypes.objectOf(propTypes.object),
   adminName: propTypes.string.isRequired,
   fetchCourseData: propTypes.func.isRequired,
   selectedCourse: propTypes.number.isRequired,
   onViewClick: propTypes.func.isRequired,
+  userId: propTypes.number.isRequired,
 };
 
 Home.defaultProps = {
-  // course: [],
+  course: {},
 };
 
 export default Home;

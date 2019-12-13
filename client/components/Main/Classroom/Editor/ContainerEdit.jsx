@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
+import propTypes from 'prop-types';
 import Axios from 'axios';
 
 import {
@@ -36,12 +36,11 @@ const ContainerEdit = ({
       updatedBy: adminName,
       id: selectedContainer.id,
     })
-      .then((res) => {
-        console.log('Content created', res.data);
+      .then(() => {
         fetchCourseData();
       })
       .catch(() => {
-        console.log('Oh no');
+        alert('Failed to fetch container data');
       });
   };
 
@@ -51,15 +50,14 @@ const ContainerEdit = ({
       updatedBy: adminName,
       containerId: selectedContainer.id,
     })
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
         fetchCourseData();
       })
       .then(() => {
         alert('New Content is created');
       })
       .catch(() => {
-        console.log('Oh no');
+        alert('Fail to create new content');
       });
   };
 
@@ -119,9 +117,21 @@ const ContainerEdit = ({
       </div>
     </Container>
   );
-}
+};
 
 ContainerEdit.propTypes = {
+  selectedContainer: propTypes.shape({
+    id: propTypes.number,
+    title: propTypes.string,
+  }),
+  handleChange: propTypes.func.isRequired,
+  containerTitle: propTypes.string.isRequired,
+  adminName: propTypes.string.isRequired,
+  fetchCourseData: propTypes.func.isRequired,
+};
+
+ContainerEdit.defaultProps = {
+  selectedContainer: null,
 
 };
 

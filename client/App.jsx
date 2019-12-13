@@ -12,14 +12,14 @@ import SignupForm from './components/SignForm/SignUpForm';
 import AdminSignupForm from './components/SignForm/AdminSignUpForm';
 import SignInForm from './components/SignForm/SignInForm';
 import SignOut from './components/SignForm/SignOut';
-import Dashboard from './components/Dashboard'
+import Dashboard from './components/Dashboard';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       loggedIn: false,
-      userId: '',
+      userId: 0,
       course: {},
       isAdmin: false,
       name: '',
@@ -78,7 +78,6 @@ class App extends React.Component {
           acc[cur.id] = cur;
           return acc;
         }, {});
-
         this.setState({
           course: courseObj,
           selectedCourseItem: selectedCourse === 0 ? null : courseObj[selectedCourse],
@@ -100,7 +99,7 @@ class App extends React.Component {
     this.setState({
       loggedIn: false,
       isAdmin: false,
-      userId: '',
+      userId: 0,
       name: '',
       selectedCourse: 0,
     });
@@ -111,7 +110,6 @@ class App extends React.Component {
     const {
       loggedIn, name, course, isAdmin, selectedCourse, selectedCourseItem, userId,
     } = this.state;
-
     const PrivateRoute = () => (
       <Route
         render={() => (

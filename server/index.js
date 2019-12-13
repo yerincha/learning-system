@@ -531,13 +531,30 @@ app.get('/api/content_file', (req, res) => {
 
 // Content File Save
 app.post('/api/content_file', (req, res) => {
-  fs.writeFile(`server/content_files/${req.body.id}.md`, req.body.body, (err) => {
-    if (err) {
+  db.Content.update({
+    title: req.body.title,
+  },
+  {
+    where: {
+      id: req.body.id,
+    },
+  })
+    .then(() => {
+      const fileDir = 'server/content_files';
+      if (!fs.existsSync(fileDir)) {
+        fs.mkdirSync(fileDir);
+      }
+      fs.writeFile(`${fileDir}/${req.body.id}.md`, req.body.body, (err) => {
+        if (err) {
+          res.sendStatus(500);
+          return;
+        }
+        res.sendStatus(200);
+      });
+    })
+    .catch(() => {
       res.sendStatus(500);
-      return;
-    }
-    res.sendStatus(200);
-  });
+    });
 });
 
 // Delete Content
@@ -604,7 +621,6 @@ app.post('/api/code', (req, res) => {
     },
   })
     .then((data) => {
-      console.log('Generate UserCourse', data);
       if (data !== null) {
         res.sendStatus(400);
       } else {

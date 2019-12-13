@@ -1,4 +1,6 @@
+/* eslint-disable no-alert */
 import React from 'react';
+import propTypes from 'prop-types';
 import {
   Button, CssBaseline, TextField, Typography, Container,
 } from '@material-ui/core';
@@ -34,7 +36,7 @@ const CourseRegister = ({ userId, fetchCourseData }) => {
     if (codeField === null || codeField.trim().length === 0 || codeField === undefined) {
       return alert('Invalid code, please check your code');
     }
-    Axios.put('/api/register', {
+    return Axios.put('/api/register', {
       userId,
       code: codeField,
     })
@@ -92,6 +94,10 @@ const CourseRegister = ({ userId, fetchCourseData }) => {
       </div>
     </Container>
   );
+};
+CourseRegister.propTypes = {
+  fetchCourseData: propTypes.func.isRequired,
+  userId: propTypes.number.isRequired,
 };
 
 export default CourseRegister;

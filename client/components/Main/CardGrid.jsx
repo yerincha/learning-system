@@ -1,10 +1,13 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-alert */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import propTypes from 'prop-types';
 import Axios from 'axios';
 
 import {
-  Button, Card, CardActions, CardContent, CardMedia, CssBaseline, Grid, Typography, Container, IconButton,
+  Button, Card, CardActions, CardContent, CardMedia,
+  CssBaseline, Grid, Typography, Container, IconButton,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -27,7 +30,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CardGrid = ({ course, onViewClick, isAdmin, fetchCourseData }) => {
+const CardGrid = ({
+  course, onViewClick, isAdmin, fetchCourseData,
+}) => {
   const classes = useStyles();
 
   const handleCourseDelete = (cardId) => {
@@ -99,12 +104,14 @@ const CardGrid = ({ course, onViewClick, isAdmin, fetchCourseData }) => {
 };
 
 CardGrid.propTypes = {
-  // course: propTypes.arrayOf(propTypes.object),
+  course: propTypes.objectOf(propTypes.object),
   onViewClick: propTypes.func.isRequired,
+  isAdmin: propTypes.bool.isRequired,
+  fetchCourseData: propTypes.func.isRequired,
 };
 
 CardGrid.defaultProps = {
-  // course: [],
+  course: {},
 };
 
 export default CardGrid;

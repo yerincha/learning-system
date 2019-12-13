@@ -1,21 +1,15 @@
+/* eslint-disable no-alert */
 /* eslint-disable no-empty */
 import React, { useState, useEffect } from 'react';
+import propTypes from 'prop-types';
 import MdEditor from 'react-markdown-editor-lite';
 import MarkdownIt from 'markdown-it';
 import Axios from 'axios';
-import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Button } from '@material-ui/core';
+import { Typography, Button, TextField } from '@material-ui/core';
 import hljs from 'highlight.js';
 
-const useStyles = makeStyles((theme) => ({
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-  },
-}));
-
 const ContentEdit = ({ selectedContent }) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const mdParser = new MarkdownIt({
     html: true,
     linkify: true,
@@ -30,12 +24,15 @@ const ContentEdit = ({ selectedContent }) => {
     },
   });
   const [contentBody, setContentBody] = useState('');
+  const [contentTitle, setContentTitle] = React.useState(selectedContent.title);
+  const handleContentTitleChange = (e) => {
+    setContentTitle(e.target.value);
+  };
 
   let mdEditor = null;
   const fetchContentBody = () => {
     Axios.get(`/api/content_file?id=${selectedContent.id}`)
       .then((res) => {
-        console.log('loaded body', res.data);
         setContentBody(`${res.data}`);
       })
       .catch(() => {
@@ -48,6 +45,7 @@ const ContentEdit = ({ selectedContent }) => {
     Axios.post('/api/content_file', {
       body,
       id: selectedContent.id,
+      title: contentTitle,
     })
       .then(() => {
         alert('File Saved!');
@@ -62,27 +60,36 @@ const ContentEdit = ({ selectedContent }) => {
     fetchContentBody();
   });
 
-  console.log('changing?????', selectedContent);
-  console.log('contentBody?', contentBody);
   return (
-    <main className={classes.content}>
-      <Typography paragraph>
-        <Button onClick={handleSaveClick}> SAVE </Button>
-        <MdEditor
-          // eslint-disable-next-line no-return-assign
-          ref={(node) => mdEditor = node}
-          value={contentBody}
-          renderHTML={(text) => mdParser.render(text)}
-          id={selectedContent.id}
-          style={{ height: '600px' }}
-        />
-      </Typography>
-    </main>
+    <Typography component="span" paragraph>
+      <TextField
+        id="standard-basic"
+        label="Content Title"
+        defaultValue={selectedContent.title}
+        onChange={handleContentTitleChange}
+      />
+      <Button variant="contained" onClick={handleSaveClick}> SAVE </Button>
+      <MdEditor
+        // eslint-disable-next-line no-return-assign
+        ref={(node) => mdEditor = node}
+        value={contentBody}
+        renderHTML={(text) => mdParser.render(text)}
+        id={selectedContent.id}
+        style={{ height: '600px' }}
+      />
+    </Typography>
   );
 };
 
 ContentEdit.propTypes = {
+  selectedContent: propTypes.shape({
+    id: propTypes.number,
+    title: propTypes.string,
+  }),
+};
 
+ContentEdit.defaultProps = {
+  selectedContent: null,
 };
 
 export default ContentEdit;

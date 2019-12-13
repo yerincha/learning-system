@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable no-alert */
 import React, { useState } from 'react';
 import { Redirect, Link } from 'react-router-dom';
@@ -99,7 +100,6 @@ const AdminSignup = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                autoComplete="fname"
                 name="firstName"
                 variant="outlined"
                 required
@@ -107,6 +107,7 @@ const AdminSignup = () => {
                 id="firstName"
                 label="First Name"
                 autoFocus
+                autoComplete="fname"
                 onChange={handleChange('firstname')}
               />
             </Grid>

@@ -1,3 +1,5 @@
+/* eslint-disable no-alert */
+/* eslint-disable no-restricted-globals */
 import React from 'react';
 import propTypes from 'prop-types';
 import Axios from 'axios';
@@ -125,7 +127,13 @@ Container.propTypes = {
     id: propTypes.number.isRequired,
     title: propTypes.string,
     contents: propTypes.arrayOf(propTypes.object),
+    published: propTypes.bool,
   }),
+  containerEditClick: propTypes.func.isRequired,
+  contentEditClick: propTypes.func.isRequired,
+  contentBodyClick: propTypes.func.isRequired,
+  fetchCourseContent: propTypes.func.isRequired,
+  isAdmin: propTypes.bool.isRequired,
 };
 
 Container.defaultProps = {

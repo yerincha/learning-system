@@ -1,5 +1,7 @@
+/* eslint-disable react/no-danger */
 /* eslint-disable no-empty */
 import React, { useState, useEffect } from 'react';
+import propTypes from 'prop-types';
 import MarkdownIt from 'markdown-it';
 import Axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
@@ -33,7 +35,6 @@ const ContentView = ({ selectedContent }) => {
   const fetchContentBody = () => {
     Axios.get(`/api/content_file?id=${selectedContent.id}`)
       .then((res) => {
-        console.log('loaded body', res.data);
         setContentBody(`${res.data}`);
       })
       .catch(() => {
@@ -48,11 +49,9 @@ const ContentView = ({ selectedContent }) => {
 
   const mdHtml = () => (mdParser.render(contentBody));
 
-  console.log('changing?????', selectedContent);
-  console.log('contentBody?', contentBody);
   return (
     <main className={classes.content}>
-      <Typography paragraph>
+      <Typography component="span" paragraph>
         <p dangerouslySetInnerHTML={{ __html: mdHtml() }} />
       </Typography>
     </main>
@@ -60,7 +59,13 @@ const ContentView = ({ selectedContent }) => {
 };
 
 ContentView.propTypes = {
+  selectedContent: propTypes.shape({
+    id: propTypes.number,
+  }),
+};
 
+ContentView.defaultProps = {
+  selectedContent: null,
 };
 
 export default ContentView;

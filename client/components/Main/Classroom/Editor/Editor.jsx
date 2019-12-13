@@ -1,7 +1,7 @@
 /* eslint-disable no-else-return */
 import React from 'react';
 import propTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
+import { Typography, CssBaseline } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import CourseEdit from './CourseEdit';
@@ -18,9 +18,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Editor = ({
-  isCourseEditClick, isContainerEditClick, isContentEditClick, handleChange, fetchCourseContent,
-  courseTitle, courseSummary, containerTitle, contentTitle, content, selectedCourseData,
-  selectedCourseItem, fetchCourseData, adminName, selectedContainer, selectedContent, isContentClicked,
+  isCourseEditClick, isContainerEditClick, isContentEditClick, handleChange,
+  fetchCourseContent, courseTitle, courseSummary, containerTitle,
+  contentTitle, content, selectedCourseData, selectedCourseItem,
+  fetchCourseData, adminName, selectedContainer, selectedContent, isContentClicked,
 }) => {
   const renderContent = () => {
     if (isCourseEditClick) {
@@ -73,6 +74,7 @@ const Editor = ({
 
   return (
     <main className={classes.content}>
+      <CssBaseline />
       <div className={classes.toolbar} />
       <Typography component="span" paragraph>
         {renderContent()}
@@ -93,15 +95,27 @@ Editor.propTypes = {
   contentTitle: propTypes.string.isRequired,
   content: propTypes.string.isRequired,
   selectedCourseData: propTypes.arrayOf(propTypes.object),
-  selectedCourseItem: propTypes.objectOf(propTypes.string),
+  selectedCourseItem: propTypes.shape({
+    id: propTypes.number,
+    title: propTypes.string,
+  }),
   fetchCourseData: propTypes.func.isRequired,
   adminName: propTypes.string.isRequired,
-  selectedContainer: propTypes.objectOf(propTypes.string),
+  selectedContainer: propTypes.shape({
+    id: propTypes.number,
+    title: propTypes.string,
+  }),
+  isContentClicked: propTypes.bool.isRequired,
+  selectedContent: propTypes.shape({
+    id: propTypes.number,
+  }),
 };
 
 Editor.defaultProps = {
   selectedCourseData: null,
   selectedCourseItem: null,
   selectedContainer: null,
+  selectedContent: null,
 };
+
 export default Editor;

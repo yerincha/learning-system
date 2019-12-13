@@ -34,11 +34,9 @@ const SignInForm = ({ loggedIn, login }) => {
     e.preventDefault();
     axios.post('/api/login', { email: values.email, password: values.password })
       .then((res) => {
-        console.log(res.data)
         login(res.data);
       })
       .catch(() => {
-        // console.log('not valid');
         setIsValid(false);
       });
   };
