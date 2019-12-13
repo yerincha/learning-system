@@ -23,13 +23,29 @@ const SignupForm = () => {
     password: '',
     Admin: false,
     passwordConfirmation: '',
+    isPhoneValid: true,
+    isEmailValid: true,
   });
 
+  const isCellPhoneValidate = (phoneNum) => {
+    const phoneRegExp = /^(01[016789]{1}|02|0[3-9]{1}[0-9]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
+    return phoneRegExp.test(phoneNum);
+  };
+
   const handleChange = (name) => (event) => {
-    setValues({
-      ...values,
-      [name]: event.target.value,
-    });
+    if (name === 'phone') {
+      const validationPhone = isCellPhoneValidate(event.target.value);
+      setValues({
+        ...values,
+        [name]: event.target.value,
+        isPhoneValid: validationPhone,
+      });
+    } else {
+      setValues({
+        ...values,
+        [name]: event.target.value,
+      });
+    }
   };
 
   const onSubmit = (e) => {
@@ -54,6 +70,7 @@ const SignupForm = () => {
         });
     }
   };
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -138,9 +155,11 @@ const SignupForm = () => {
                 name="phone"
                 label="Phone Number"
                 type="phone"
+                helperText={(values.isPhoneValid ? '' : 'Invalid phone number.')}
                 id="formatted-text-mask-input"
                 onChange={handleChange('phone')}
-                value={values.textmask}
+                value={values.phone}
+                error={!values.isPhoneValid}
               />
             </Grid>
           </Grid>
