@@ -26,14 +26,14 @@ const Body = ({
 
 Body.propTypes = {
   loggedIn: propTypes.bool.isRequired,
-  // course: propTypes.arrayOf(propTypes.object),
+  course: propTypes.objectOf(propTypes.object),
   isAdmin: propTypes.bool.isRequired,
   selectedCourse: propTypes.number.isRequired,
   onViewClick: propTypes.func.isRequired,
 };
 
 Body.defaultProps = {
-  // course: [],
+  course: {},
 };
 
 export default Body;

@@ -97,7 +97,7 @@ const Home = ({
                       <div>
                         <Link to="/dashboard">
                           <Button variant="contained" color="primary">
-                            Dash Board
+                            Go to Dash Board
                           </Button>
                         </Link>
                         <Button variant="outlined" color="primary" onClick={handleClick}>
@@ -148,15 +148,16 @@ const Home = ({
 Home.propTypes = {
   loggedIn: propTypes.bool.isRequired,
   isAdmin: propTypes.bool.isRequired,
-  // course: propTypes.objectOf(propTypes.array),
+  course: propTypes.objectOf(propTypes.object),
   adminName: propTypes.string.isRequired,
   fetchCourseData: propTypes.func.isRequired,
   selectedCourse: propTypes.number.isRequired,
   onViewClick: propTypes.func.isRequired,
+  userId: propTypes.number.isRequired,
 };
 
 Home.defaultProps = {
-  // course: {},
+  course: {},
 };
 
 export default Home;

@@ -1,5 +1,6 @@
+/* eslint-disable no-alert */
 import React from 'react';
-import PropTypes from 'prop-types';
+import propTypes from 'prop-types';
 import Axios from 'axios';
 
 import {
@@ -35,7 +36,7 @@ const CourseEdit = ({
         fetchCourseData();
       })
       .catch(() => {
-        alert('Failed to update course')
+        alert('Failed to update course');
       });
   };
 
@@ -86,10 +87,23 @@ const CourseEdit = ({
       </div>
     </Container>
   );
-}
-
-CourseEdit.propTypes = {
-
 };
 
+CourseEdit.propTypes = {
+  handleChange: propTypes.func.isRequired,
+  courseTitle: propTypes.string.isRequired,
+  courseSummary: propTypes.string.isRequired,
+  selectedCourseItem: propTypes.shape({
+    id: propTypes.number,
+    title: propTypes.string,
+    summary: propTypes.string,
+  }),
+  fetchCourseData: propTypes.func.isRequired,
+  adminName: propTypes.string.isRequired,
+
+
+};
+CourseEdit.defaultProps = {
+  selectedCourseItem: null,
+};
 export default CourseEdit;

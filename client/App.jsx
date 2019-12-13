@@ -19,7 +19,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       loggedIn: false,
-      userId: '',
+      userId: 0,
       course: {},
       isAdmin: false,
       name: '',
@@ -78,7 +78,6 @@ class App extends React.Component {
           acc[cur.id] = cur;
           return acc;
         }, {});
-        console.log(courseObj)
         this.setState({
           course: courseObj,
           selectedCourseItem: selectedCourse === 0 ? null : courseObj[selectedCourse],
@@ -100,7 +99,7 @@ class App extends React.Component {
     this.setState({
       loggedIn: false,
       isAdmin: false,
-      userId: '',
+      userId: 0,
       name: '',
       selectedCourse: 0,
     });
@@ -111,7 +110,6 @@ class App extends React.Component {
     const {
       loggedIn, name, course, isAdmin, selectedCourse, selectedCourseItem, userId,
     } = this.state;
-
     const PrivateRoute = () => (
       <Route
         render={() => (

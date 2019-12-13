@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-alert */
 import React from 'react';
 import propTypes from 'prop-types';
 import Axios from 'axios';
@@ -17,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Content = ({
-  content, contentEditClick, selectedContent, contentBodyClick, isAdmin, fetchCourseContent,
+  content, contentEditClick, contentBodyClick, isAdmin, fetchCourseContent,
 }) => {
   const classes = useStyles();
   const [dense, setDense] = React.useState(true);
@@ -55,7 +58,12 @@ const Content = ({
   };
 
   return (
-    <ListItem button className={classes.nested} dense={dense} onClick={() => contentBodyClick(content)}>
+    <ListItem
+      button
+      className={classes.nested}
+      dense={dense}
+      onClick={() => contentBodyClick(content)}
+    >
       <ListItemText primary={content.title} />
       {isAdmin
         ? (
@@ -85,7 +93,12 @@ Content.propTypes = {
   content: propTypes.shape({
     id: propTypes.number.isRequired,
     title: propTypes.string,
+    published: propTypes.bool,
   }),
+  contentEditClick: propTypes.func.isRequired,
+  contentBodyClick: propTypes.func.isRequired,
+  isAdmin: propTypes.bool.isRequired,
+  fetchCourseContent: propTypes.func.isRequired,
 };
 
 Content.defaultProps = {

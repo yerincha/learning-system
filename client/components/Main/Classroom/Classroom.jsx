@@ -59,7 +59,6 @@ const Classroom = ({
       courseId: selectedCourse,
     })
       .then(() => {
-        // console.log('container submitted');
         fetchCourseContent();
       });
   };
@@ -100,7 +99,6 @@ const Classroom = ({
     setIsCourseEditClick(false);
     setIsContainerEditClick(false);
   };
-
   return (
     <div className={classes.classroom}>
       <FileSystem
@@ -142,16 +140,25 @@ const Classroom = ({
 };
 
 Classroom.propTypes = {
-  course: propTypes.arrayOf(propTypes.object).isRequired,
+  course: propTypes.shape({
+    1: propTypes.shape({
+      id: propTypes.number,
+    }),
+  }),
   selectedCourse: propTypes.number.isRequired,
   isAdmin: propTypes.bool.isRequired,
   adminName: propTypes.string.isRequired,
-  selectedCourseItem: propTypes.objectOf(propTypes.number),
+  selectedCourseItem: propTypes.shape({
+    id: propTypes.number,
+    title: propTypes.string,
+    summary: propTypes.string,
+  }),
   fetchCourseData: propTypes.func.isRequired,
 };
 
 Classroom.defaultProps = {
   selectedCourseItem: null,
+  course: {},
 };
 
 export default Classroom;

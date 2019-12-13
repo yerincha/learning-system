@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import propTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  List, ListItem, ListItemSecondaryAction, IconButton, Drawer,
+  List, ListItem, ListItemSecondaryAction, IconButton, Drawer, CssBaseline,
 } from '@material-ui/core';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
   title: {
     fontSize: '20px',
+  },
+  drawerPaper: {
+    width: drawerWidth,
   },
 }));
 
@@ -64,58 +67,56 @@ const FileSystem = ({
     </div>
   );
   return (
-
-    <Drawer
-      className={classes.drawer}
-      variant="permanent"
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-      ModalProps={{
-        keepMounted: true, // Better open performance on mobile.
-      }}
-    >
-      <div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <List className={classes.toolbar}>
-          {isAdmin
+    <div className={classes.root}>
+      <CssBaseline />
+      <Drawer
+        className={classes.drawer}
+        variant="permanent"
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+        ModalProps={{
+          keepMounted: true, // Better open performance on mobile.
+        }}
+      >
+        <div>
+          <div className={classes.toolbar} />
+          <List>
+            {isAdmin
+              ? (
+                <ListItem className={classes.title} button onClick={courseEditClick}>
+                  {selectedCourseItem.title}
+                </ListItem>
+              )
+              : (
+                <ListItem className={classes.title}>
+                  {selectedCourseItem.title}
+                </ListItem>
+              )}
+            {isAdmin
+              ? (
+                <ListItemSecondaryAction>
+                  <IconButton edge="end" aria-label="edit" size="medium" onClick={handleContainerAddClick}>
+                    <AddCircleOutlineIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              )
+              : null}
+          </List>
+          {listGenerate()}
+          {isContainerAddClicked
             ? (
-              <ListItem className={classes.title} button onClick={courseEditClick}>
-                {selectedCourseItem.title}
-              </ListItem>
-            )
-            : (
-              <ListItem className={classes.title}>
-                {selectedCourseItem.title}
-              </ListItem>
-            )}
-          {isAdmin
-            ? (
-              <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="edit" size="medium" onClick={handleContainerAddClick}>
-                  <AddCircleOutlineIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
+              <ContainerCreator
+                isClicked={isContainerAddClicked}
+                handleChange={handleChange}
+                onContainerSubmit={onContainerSubmit}
+                handleClose={handleClose}
+              />
             )
             : null}
-        </List>
-        {listGenerate()}
-        {isContainerAddClicked
-          ? (
-            <ContainerCreator
-              isClicked={isContainerAddClicked}
-              handleChange={handleChange}
-              onContainerSubmit={onContainerSubmit}
-              handleClose={handleClose}
-            />
-          )
-          : null}
-      </div>
-    </Drawer>
-
+        </div>
+      </Drawer>
+    </div>
   );
 };
 
@@ -123,10 +124,16 @@ FileSystem.propTypes = {
   selectedCourseData: propTypes.arrayOf(propTypes.object),
   handleChange: propTypes.func.isRequired,
   onContainerSubmit: propTypes.func.isRequired,
-  selectedCourseItem: propTypes.objectOf(propTypes.string),
+  selectedCourseItem: propTypes.shape({
+    id: propTypes.number,
+    title: propTypes.string,
+  }),
   courseEditClick: propTypes.func.isRequired,
   containerEditClick: propTypes.func.isRequired,
   contentEditClick: propTypes.func.isRequired,
+  fetchCourseContent: propTypes.func.isRequired,
+  contentBodyClick: propTypes.func.isRequired,
+  isAdmin: propTypes.bool.isRequired,
 };
 
 FileSystem.defaultProps = {
