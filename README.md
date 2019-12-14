@@ -1,5 +1,7 @@
 # learning-system
 
+![Screen Shot](/demo/ScreenShot1.png)
+
 ## Introduction
 
 This is a React Web Application of Learning Management System 
