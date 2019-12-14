@@ -3,6 +3,12 @@ import React from 'react';
 import Axios from 'axios';
 
 import { makeStyles } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 import {
   Button, Box, Typography, Container, Select, FormControl, MenuItem, InputLabel,
@@ -35,6 +41,7 @@ const Dashboard = () => {
   const [allStudent, setAllStudent] = React.useState('');
   const [selectedCourse, setSelectedCourse] = React.useState('');
   const [selectedStudent, setSelectedStudent] = React.useState('');
+  const [allInvitationCode, setAllInvitationCode] = React.useState([]);
 
   const handleCourseChange = (event) => {
     setSelectedCourse(event.target.value);
@@ -47,24 +54,55 @@ const Dashboard = () => {
     Axios.get('/api/course_all')
       .then((courses) => {
         setAllCourse(courses.data);
+        return courses.data;
       })
-      .then(() => {
-        callback();
+      .then((courses) => {
+        callback(courses);
       })
       .catch(() => {
         alert('Can not load courses');
       });
   };
 
-  const fetchAllStudent = () => {
+  const fetchAllStudent = (courses) => {
     Axios.get('/api/student_all')
       .then((students) => {
         setAllStudent(students.data);
+        return students.data;
+      })
+      .then((students) => {
+        fetchAllUserCourse(courses, students);
       })
       .catch(() => {
         alert('Can not load students');
       });
   };
+
+  const fetchAllUserCourse = (courses, students) => {
+    Axios.get('/api/code')
+      .then((res) => {
+        let courseObj = courses.reduce((acc, cur) => {
+          acc[cur.id] = cur;
+          return acc;
+        }, {});
+        let studentObj = students.reduce((acc, cur) => {
+          acc[cur.id] = cur;
+          return acc;
+        }, {});
+
+        let invitationCodes = res.data.map((userCourse) => {
+          return {
+            courseTitle: courseObj[userCourse.courseId].title,
+            studentName: `${studentObj[userCourse.userId].name} (${studentObj[userCourse.userId].email})`,
+            code: userCourse.code,
+          }
+        })
+        setAllInvitationCode(invitationCodes);
+      })
+      .catch((err) => {
+        alert('Can not load invitation codes');
+      });
+  }
 
   React.useEffect(() => {
     fetchAllCourse(fetchAllStudent);
@@ -93,6 +131,7 @@ const Dashboard = () => {
         code,
       })
         .then((res) => {
+          fetchAllCourse(fetchAllStudent);
           alert(`The unique code is ${res.data}`);
         })
         .catch((err) => {
@@ -157,6 +196,29 @@ const Dashboard = () => {
           Generate Invitation Code
         </Button>
       </div>
+      <br /><br />
+      <Paper className={classes.root}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableHead>
+            <TableRow key="label_row">
+              <TableCell>Course</TableCell>
+              <TableCell>Student</TableCell>
+              <TableCell>Invitation Code</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {allInvitationCode.map(row => (
+              <TableRow key={row.code}>
+                <TableCell component="th" scope="row">
+                  {row.courseTitle}
+                </TableCell>
+                <TableCell>{row.studentName}</TableCell>
+                <TableCell>{row.code}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
       <Box mt={8}>
         <Copyright />
       </Box>
@@ -165,3 +227,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

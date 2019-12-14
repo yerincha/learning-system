@@ -721,6 +721,15 @@ app.post('/api/code', (req, res) => {
     });
 });
 
+// Get all User-Course
+app.get('/api/code', (req, res) => {
+  db.UserCourse.findAll()
+    .then((result) => {
+      const userCourses = result.map((data) => data.dataValues);
+      res.send(userCourses).status(200);
+    });
+});
+
 // course register
 app.put('/api/register', (req, res) => {
   db.UserCourse.findOne({
