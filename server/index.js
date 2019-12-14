@@ -299,6 +299,9 @@ app.get('/api/course', (req, res) => {
     where: {
       courseId: req.query.id,
     },
+    order: [
+      ['index', 'ASC'],
+    ],
   }).then((containers) => {
     const containerIds = containers.reduce((acc, cur) => {
       acc.push(cur.id);
@@ -310,6 +313,9 @@ app.get('/api/course', (req, res) => {
           [Op.or]: containerIds,
         },
       },
+      order: [
+        ['index', 'ASC'],
+      ],
     }).then((contents) => {
       const containerIdAndContentsObj = {};
 
@@ -415,7 +421,26 @@ app.delete('/api/course', (req, res) => {
 // Container
 
 app.post('/api/container', (req, res) => {
-  db.Container.create(req.body)
+  db.Container.findAll({
+    where: {
+      courseId: req.body.courseId,
+    },
+    order: [
+      ['index', 'DESC'],
+    ],
+    limit: 1,
+  })
+    .then((dbRes) => {
+      // console.log(dbRes);
+      let lastIndex = 0;
+      if (dbRes.length > 0) {
+        lastIndex = dbRes[0].dataValues.index + 1;
+      }
+
+      req.body.index = lastIndex;
+
+      return db.Container.create(req.body);
+    })
     .then(() => {
       res.sendStatus(200);
     })
@@ -507,9 +532,46 @@ app.put('/api/container_published', (req, res) => {
     });
 });
 
+// Update Container Order
+app.put('/api/container_update_index', (req, res) => {
+  const allUpdates = req.body.map((item) => db.Container.update({
+    index: item.index,
+  },
+  {
+    where: {
+      id: item.id,
+    },
+  }));
+  Promise.all(allUpdates).then(() => {
+    // console.log('Update Index Finished');
+    res.sendStatus(200);
+  })
+    .catch(() => {
+      res.sendStatus(500);
+    });
+});
+
 // New Content create
 app.post('/api/content', (req, res) => {
-  db.Content.create(req.body)
+  db.Content.findAll({
+    where: {
+      containerId: req.body.containerId,
+    },
+    order: [
+      ['index', 'DESC'],
+    ],
+    limit: 1,
+  })
+    .then((dbRes) => {
+      let lastIndex = 0;
+      if (dbRes.length > 0) {
+        lastIndex = dbRes[0].dataValues.index + 1;
+      }
+
+      req.body.index = lastIndex;
+
+      return db.Content.create(req.body);
+    })
     .then(() => {
       res.sendStatus(200);
     })
@@ -606,6 +668,23 @@ app.put('/api/content_published', (req, res) => {
     .then(() => {
       res.sendStatus(200);
     })
+    .catch(() => {
+      res.sendStatus(500);
+    });
+});
+
+// Update Content Order
+app.put('/api/content_update_index', (req, res) => {
+  const allUpdates = req.body.map((item) => db.Content.update({
+    index: item.index,
+  },
+  {
+    where: { id: item.id },
+  }));
+  Promise.all(allUpdates).then(() => {
+    // console.log('Update Index Finished');
+    res.sendStatus(200);
+  })
     .catch(() => {
       res.sendStatus(500);
     });

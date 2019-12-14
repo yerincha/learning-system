@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 const CourseEdit = ({
   handleChange, courseTitle, courseSummary,
   selectedCourseItem, fetchCourseData, adminName,
+  containerOrderEditClick,
 }) => {
   const classes = useStyles();
   const handleSubmit = (e) => {
@@ -84,6 +85,16 @@ const CourseEdit = ({
             Submit
           </Button>
         </form>
+        <br />
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.editcontainerorder}
+          onClick={() => containerOrderEditClick()}
+        >
+          Edit Container Order
+        </Button>
       </div>
     </Container>
   );
@@ -100,8 +111,7 @@ CourseEdit.propTypes = {
   }),
   fetchCourseData: propTypes.func.isRequired,
   adminName: propTypes.string.isRequired,
-
-
+  containerOrderEditClick: propTypes.func.isRequired,
 };
 CourseEdit.defaultProps = {
   selectedCourseItem: null,

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import React from 'react';
 import propTypes from 'prop-types';
 
@@ -8,17 +9,18 @@ const Body = ({
   loggedIn, course, isAdmin, selectedCourse, onViewClick, fetchCourseData, userId,
 }) => {
   let content = null;
-  if (loggedIn && Object.keys(course).length === 0) {
-    content = <CourseRegister userId={userId} fetchCourseData={fetchCourseData} />;
-  } else if (loggedIn) {
+  if (loggedIn) {
     content = (
-      <CardGrid
-        course={course}
-        selectedCourse={selectedCourse}
-        onViewClick={onViewClick}
-        isAdmin={isAdmin}
-        fetchCourseData={fetchCourseData}
-      />
+      <div>
+        <CardGrid
+          course={course}
+          selectedCourse={selectedCourse}
+          onViewClick={onViewClick}
+          isAdmin={isAdmin}
+          fetchCourseData={fetchCourseData}
+        />
+        {isAdmin ? null : <CourseRegister userId={userId} fetchCourseData={fetchCourseData} />}
+      </div>
     );
   }
   return content;

@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 import React from 'react';
 import propTypes from 'prop-types';
 import Axios from 'axios';
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ContainerEdit = ({
   handleChange, containerTitle, selectedContainer,
-  adminName, fetchCourseData,
+  adminName, fetchCourseData, contentOrderEditClick,
 }) => {
   const classes = useStyles();
 
@@ -114,6 +115,16 @@ const ContainerEdit = ({
             New Content
           </Button>
         </form>
+        <br />
+        <Button
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.editcontainerorder}
+          onClick={() => contentOrderEditClick()}
+        >
+          Edit Content Order
+        </Button>
       </div>
     </Container>
   );
@@ -128,6 +139,7 @@ ContainerEdit.propTypes = {
   containerTitle: propTypes.string.isRequired,
   adminName: propTypes.string.isRequired,
   fetchCourseData: propTypes.func.isRequired,
+  contentOrderEditClick: propTypes.func.isRequired,
 };
 
 ContainerEdit.defaultProps = {

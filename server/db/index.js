@@ -66,6 +66,7 @@ const Container = sequelize.define('containers', {
       key: 'id',
     },
   },
+  index: Sequelize.INTEGER,
   published: { type: Sequelize.BOOLEAN, defaultValue: false },
 });
 
@@ -82,6 +83,7 @@ const Content = sequelize.define('content', {
   },
   data: Sequelize.TEXT,
   title: Sequelize.TEXT,
+  index: Sequelize.INTEGER,
   published: { type: Sequelize.BOOLEAN, defaultValue: false },
 });
 
