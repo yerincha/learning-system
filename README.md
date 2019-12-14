@@ -29,6 +29,11 @@ $ npm run build
 $ npm start
 ```
 
+```
+# mySQL database set up
+$ mysql -u root mysql < ./server/db/schema.sql
+```
+
 ## Features
 - Sign-in and Sign-up page.<br> 
   (Validating function email and phone(Korean number both local and mobile) is applied)<br>
@@ -40,11 +45,13 @@ $ npm start
 ### When you sign in with admin account
 - You can see 'new course create' and 'dashboard button' on the main page.<br>
 - You can generate passcode for the entering course, which is unique between students and courses. <br>
-- you can create, edit, delete courses, containers, contents on the viewer.<br>
+- You can create, edit, delete courses, containers, contents on the viewer.<br>
+- You also can change the order of containers and contents with drag and drop. **Click edit button on the viewer**
 - When you click 'view' on the grid, you can enter to the viewer.<br>
 - When you click the name of content, you can see the view mode of content for the student.<br>
-- **When you create a new content, the content will be saved on the '/server/content_files' directory
-  the name of file is an id of the content at the database. And when you edit, it will be overwrite.
+- **When you create a new content, the content will be saved on the '/server/content_files' directory**
+  **the name of file is an id of the content at the database. And when you edit, it will be overwrite.**
+
 
 ### When you sign in with student account
 - You will see the form of the entering passcode for opening a new course on the main page.<br>

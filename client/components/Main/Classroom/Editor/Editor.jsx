@@ -8,6 +8,8 @@ import CourseEdit from './CourseEdit';
 import ContainerEdit from './ContainerEdit';
 import ContentEdit from './ContentEdit';
 import ContentView from './ContentView';
+import ContainerOrderEdit from './ContainerOrderEdit';
+import ContentOrderEdit from './ContentOrderEdit';
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -22,6 +24,8 @@ const Editor = ({
   fetchCourseContent, courseTitle, courseSummary, containerTitle,
   contentTitle, content, selectedCourseData, selectedCourseItem,
   fetchCourseData, adminName, selectedContainer, selectedContent, isContentClicked,
+  isContainerOrderEditClick, containerOrderEditClick, isContentOrderEditClick,
+  contentOrderEditClick,
 }) => {
   const renderContent = () => {
     if (isCourseEditClick) {
@@ -34,6 +38,7 @@ const Editor = ({
           selectedCourseItem={selectedCourseItem}
           fetchCourseData={fetchCourseData}
           adminName={adminName}
+          containerOrderEditClick={containerOrderEditClick}
         />
       );
     } else if (isContainerEditClick) {
@@ -42,10 +47,10 @@ const Editor = ({
           handleChange={handleChange}
           fetchCourseContent={fetchCourseContent}
           containerTitle={containerTitle}
-          selectedCourseData={selectedCourseData}
           adminName={adminName}
           selectedContainer={selectedContainer}
           fetchCourseData={fetchCourseData}
+          contentOrderEditClick={contentOrderEditClick}
         />
       );
     } else if (isContentEditClick) {
@@ -55,15 +60,29 @@ const Editor = ({
           fetchCourseContent={fetchCourseContent}
           contentTitle={contentTitle}
           content={content}
-          selectedCourseData={selectedCourseData}
           adminName={adminName}
           selectedContent={selectedContent}
+          fetchCourseData={fetchCourseData}
         />
       );
     } else if (isContentClicked) {
       return (
         <ContentView
           selectedContent={selectedContent}
+        />
+      );
+    } else if (isContainerOrderEditClick) {
+      return (
+        <ContainerOrderEdit
+          selectedCourseData={selectedCourseData}
+          fetchCourseData={fetchCourseData}
+        />
+      );
+    } else if (isContentOrderEditClick) {
+      return (
+        <ContentOrderEdit
+          fetchCourseData={fetchCourseData}
+          selectedContainer={selectedContainer}
         />
       );
     }
@@ -109,6 +128,10 @@ Editor.propTypes = {
   selectedContent: propTypes.shape({
     id: propTypes.number,
   }),
+  isContainerOrderEditClick: propTypes.bool.isRequired,
+  containerOrderEditClick: propTypes.func.isRequired,
+  isContentOrderEditClick: propTypes.bool.isRequired,
+  contentOrderEditClick: propTypes.func.isRequired,
 };
 
 Editor.defaultProps = {

@@ -8,7 +8,7 @@ import Axios from 'axios';
 import { Typography, Button, TextField } from '@material-ui/core';
 import hljs from 'highlight.js';
 
-const ContentEdit = ({ selectedContent }) => {
+const ContentEdit = ({ selectedContent, fetchCourseData }) => {
   // const classes = useStyles();
   const mdParser = new MarkdownIt({
     html: true,
@@ -49,6 +49,7 @@ const ContentEdit = ({ selectedContent }) => {
     })
       .then(() => {
         alert('File Saved!');
+        fetchCourseData();
       })
       .catch(() => {
         alert('Fail to save file!');
@@ -86,6 +87,7 @@ ContentEdit.propTypes = {
     id: propTypes.number,
     title: propTypes.string,
   }),
+  fetchCourseData: propTypes.func.isRequired,
 };
 
 ContentEdit.defaultProps = {
