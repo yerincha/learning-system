@@ -57,7 +57,7 @@ $ mysql -u root mysql < ./server/db/schema.sql
 
 ### When you sign in with student account
 - You will see the form of the entering passcode for opening a new course on the main page.<br>
-- If you have courses with valid passcode on the database, you can see all the courses that you've added.<br>
+- If you register a course with valid passcode on the database, you can see the course that you've added.<br>
 - You also can enter the viewer with the view button on the grid, <br>
   but you can not edit anything with the courses, containers, contents. <br>
 - You only can see the view mode of contents. <br>
