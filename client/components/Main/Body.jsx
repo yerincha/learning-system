@@ -9,7 +9,7 @@ const Body = ({
   loggedIn, course, isAdmin, selectedCourse, onViewClick, fetchCourseData, userId,
 }) => {
   let content = null;
-  if (loggedIn) {
+  if (loggedIn && Object.keys(course).length > 0) {
     content = (
       <div>
         <CardGrid
@@ -19,6 +19,12 @@ const Body = ({
           isAdmin={isAdmin}
           fetchCourseData={fetchCourseData}
         />
+        {isAdmin ? null : <CourseRegister userId={userId} fetchCourseData={fetchCourseData} />}
+      </div>
+    );
+  } else if (loggedIn) {
+    content = (
+      <div>
         {isAdmin ? null : <CourseRegister userId={userId} fetchCourseData={fetchCourseData} />}
       </div>
     );

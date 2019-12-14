@@ -64,6 +64,30 @@ const Dashboard = () => {
       });
   };
 
+  const fetchAllUserCourse = (courses, students) => {
+    Axios.get('/api/code')
+      .then((res) => {
+        const courseObj = courses.reduce((acc, cur) => {
+          acc[cur.id] = cur;
+          return acc;
+        }, {});
+        const studentObj = students.reduce((acc, cur) => {
+          acc[cur.id] = cur;
+          return acc;
+        }, {});
+
+        const invitationCodes = res.data.map((userCourse) => ({
+          courseTitle: courseObj[userCourse.courseId].title,
+          studentName: `${studentObj[userCourse.userId].name} (${studentObj[userCourse.userId].email})`,
+          code: userCourse.code,
+        }));
+        setAllInvitationCode(invitationCodes);
+      })
+      .catch(() => {
+        alert('Can not load invitation codes');
+      });
+  };
+
   const fetchAllStudent = (courses) => {
     Axios.get('/api/student_all')
       .then((students) => {
@@ -77,32 +101,6 @@ const Dashboard = () => {
         alert('Can not load students');
       });
   };
-
-  const fetchAllUserCourse = (courses, students) => {
-    Axios.get('/api/code')
-      .then((res) => {
-        let courseObj = courses.reduce((acc, cur) => {
-          acc[cur.id] = cur;
-          return acc;
-        }, {});
-        let studentObj = students.reduce((acc, cur) => {
-          acc[cur.id] = cur;
-          return acc;
-        }, {});
-
-        let invitationCodes = res.data.map((userCourse) => {
-          return {
-            courseTitle: courseObj[userCourse.courseId].title,
-            studentName: `${studentObj[userCourse.userId].name} (${studentObj[userCourse.userId].email})`,
-            code: userCourse.code,
-          }
-        })
-        setAllInvitationCode(invitationCodes);
-      })
-      .catch((err) => {
-        alert('Can not load invitation codes');
-      });
-  }
 
   React.useEffect(() => {
     fetchAllCourse(fetchAllStudent);
@@ -187,6 +185,7 @@ const Dashboard = () => {
               ) : null}
           </Select>
         </FormControl>
+        <br />
         <Button
           // fullWidth
           variant="contained"
@@ -196,7 +195,8 @@ const Dashboard = () => {
           Generate Invitation Code
         </Button>
       </div>
-      <br /><br />
+      <br />
+      <br />
       <Paper className={classes.root}>
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
@@ -207,7 +207,7 @@ const Dashboard = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {allInvitationCode.map(row => (
+            {allInvitationCode.map((row) => (
               <TableRow key={row.code}>
                 <TableCell component="th" scope="row">
                   {row.courseTitle}
@@ -227,4 +227,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
