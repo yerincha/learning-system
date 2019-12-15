@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  BrowserRouter as Router, Route, Switch, Redirect,
+  HashRouter as Router, Route, Switch, Redirect,
 } from 'react-router-dom';
 import axios from 'axios';
 import { CssBaseline } from '@material-ui/core';
