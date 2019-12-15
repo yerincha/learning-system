@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Classroom = ({
-  isAdmin, adminName, course, selectedCourse, selectedCourseItem, fetchCourseData,
+  isAdmin, adminName, selectedCourse, selectedCourseItem, fetchCourseData,
 }) => {
   const classes = useStyles();
   const [selectedCourseData, setSelectedCourseData] = useState(null);

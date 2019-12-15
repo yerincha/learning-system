@@ -9,7 +9,6 @@ import { Typography, Button, TextField } from '@material-ui/core';
 import hljs from 'highlight.js';
 
 const ContentEdit = ({ selectedContent, fetchCourseData }) => {
-  // const classes = useStyles();
   const mdParser = new MarkdownIt({
     html: true,
     linkify: true,
@@ -24,13 +23,14 @@ const ContentEdit = ({ selectedContent, fetchCourseData }) => {
     },
   });
   const [contentBody, setContentBody] = useState('');
-  const [contentTitle, setContentTitle] = React.useState(selectedContent.title);
+  const [contentTitle, setContentTitle] = useState('');
   const handleContentTitleChange = (e) => {
     setContentTitle(e.target.value);
   };
 
   let mdEditor = null;
   const fetchContentBody = () => {
+    setContentTitle(selectedContent.title);
     Axios.get(`/api/content_file?id=${selectedContent.id}`)
       .then((res) => {
         setContentBody(`${res.data}`);
@@ -66,7 +66,7 @@ const ContentEdit = ({ selectedContent, fetchCourseData }) => {
       <TextField
         id="standard-basic"
         label="Content Title"
-        defaultValue={selectedContent.title}
+        value={contentTitle}
         onChange={handleContentTitleChange}
       />
       <Button variant="contained" onClick={handleSaveClick}> SAVE </Button>
