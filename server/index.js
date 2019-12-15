@@ -95,20 +95,20 @@ app.post('/api/signup', (req, res) => {
   })
     .tap((user) => {
       if (user) {
-        throw user;
+        throw new Error('already exists');
       }
     })
     .then(() => db.User.create(data))
-    .then((results) => {
-      const insertId = results.dataValues.id;
-      return db.Session.update({ userId: insertId }, { where: { id: req.session.id } });
-    })
     .then(() => {
       console.log('New Student signed up successfully');
       res.sendStatus(200);
     })
-    .catch(() => {
-      res.sendStatus(500);
+    .catch((err) => {
+      if (err.message === 'already exists') {
+        res.sendStatus(400);
+      } else {
+        res.sendStatus(500);
+      }
     });
 });
 
@@ -138,26 +138,26 @@ app.post('/api/admin_signup', (req, res) => {
   })
     .tap((user) => {
       if (user) {
-        throw user;
+        throw new Error('already exists');
       }
     })
     .then(() => db.User.create(data))
-    .then((results) => {
-      const insertId = results.dataValues.id;
-      return db.Session.update({ userId: insertId }, { where: { id: req.session.id } });
-    })
     .then(() => {
       console.log('New Admin signed up successfully');
       res.sendStatus(200);
     })
-    .catch(() => {
-      res.sendStatus(500);
+    .catch((err) => {
+      if (err.message === 'already exists') {
+        res.sendStatus(400);
+      } else {
+        res.sendStatus(500);
+      }
     });
 });
 
 // Sign in
 
-app.post('/api/login', (req, res) => {
+app.post('/api/signin', (req, res) => {
   if (!req.body.email || !req.body.password) {
     // send back a 404 if input is not valid
     return res.sendStatus(404);

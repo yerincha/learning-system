@@ -63,7 +63,7 @@ const NavigationBar = ({ name, loggedIn, signout }) => {
             )
             : (
               <div>
-                <Link to="/login">
+                <Link to="/signin">
                   <Button color="default">Sign In</Button>
                 </Link>
                 <Link to="/signup">

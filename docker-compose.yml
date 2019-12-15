@@ -1,0 +1,21 @@
+version: '2.1'
+
+services:
+  lms:
+    build: .
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - '3000:3000'
+
+  database:
+    build: ./server/db
+    environment:
+      MYSQL_ROOT_PASSWORD: ''
+      MYSQL_DATABASE: 'LMS'
+    healthcheck:
+      test: ['CMD', "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+ 

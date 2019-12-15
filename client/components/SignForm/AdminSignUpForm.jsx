@@ -64,9 +64,9 @@ const AdminSignup = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     if (values.password !== values.passwordConfirmation) {
-      alert('비밀번호와 비밀번호 확인이 맞지 않습니다. 비밀번호를 다시 확인해주세요');
+      alert('Please check your password. Password and password confirmation are not matching');
     } else if (values.passcode !== 'P@ssc@dE') {
-      alert('관리자 패스코드가 틀렸습니다');
+      alert('Your Admin Passcode is wrong. Please check the Admin Passcode');
     } else {
       const data = {
         name: values.lastname + values.firstname,
@@ -78,10 +78,14 @@ const AdminSignup = () => {
       axios.post('/api/admin_signup', data)
         .then(() => {
           setSubmitted(true);
-          alert('관리자 회원 가입을 환영합니다. 로그인 해 주세요.');
+          alert('Welcome to be our new admin. Plase sign in.');
         })
-        .catch(() => {
-          alert('이미 등록된 이메일입니다. 다시 시도해주세요.');
+        .catch((err) => {
+          if (err.response.status === 400) {
+            alert('Please check your email. Your email address already exists.');
+          } else {
+            alert('Failed to sign up. Please try again.');
+          }
         });
     }
   };
@@ -198,17 +202,17 @@ const AdminSignup = () => {
           >
             Sign Up
           </Button>
-          {submitted ? <Redirect to="/login" /> : null}
+          {submitted ? <Redirect to="/signin" /> : null}
           <Grid container justify="flex-end">
             <Grid item>
-              <Link to="/login">
-                이미 가입하셨습니까? 여기서 로그인 해 주세요
+              <Link to="/signin">
+                 Already signed up? Please sign in.
               </Link>
             </Grid>
           </Grid>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link to="/signup"> 관리자가 아니십니까? </Link>
+              <Link to="/signup"> Student sign up </Link>
             </Grid>
           </Grid>
         </form>

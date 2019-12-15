@@ -26,7 +26,7 @@ class App extends React.Component {
       selectedCourse: 0,
       selectedCourseItem: null,
     };
-    this.login = this.login.bind(this);
+    this.signIn = this.signIn.bind(this);
     this.signout = this.signout.bind(this);
     this.fetchUserData = this.fetchUserData.bind(this);
     this.fetchCourseData = this.fetchCourseData.bind(this);
@@ -85,7 +85,7 @@ class App extends React.Component {
       });
   }
 
-  login(user) {
+  signIn(user) {
     this.setState({
       loggedIn: true,
       userId: user.id,
@@ -124,7 +124,7 @@ class App extends React.Component {
                 fetchCourseData={this.fetchCourseData}
               />
             )
-            : <Redirect to="/login" />
+            : <Redirect to="/signin" />
         )}
       />
     );
@@ -134,8 +134,8 @@ class App extends React.Component {
         <CssBaseline />
         <NavigationBar name={name} loggedIn={loggedIn} signout={this.signout} />
         <Switch>
-          <Route exact path="/login">
-            <SignInForm login={this.login} loggedIn={loggedIn} />
+          <Route exact path="/signin">
+            <SignInForm signIn={this.signIn} loggedIn={loggedIn} />
           </Route>
           <Route exact path="/signup">
             <SignupForm />
