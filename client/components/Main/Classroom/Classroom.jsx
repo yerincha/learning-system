@@ -19,9 +19,9 @@ const Classroom = ({
   const [selectedContainer, setSelectedContainer] = useState(null);
   const [selectedContent, setSelectedContent] = useState(null);
 
-  const [isCourseEditClick, setIsCourseEditClick] = useState(false);
-  const [isContainerEditClick, setIsContainerEditClick] = useState(false);
-  const [isContentEditClick, setIsContentEditClick] = useState(false);
+  const [isCourseEditClicked, setIsCourseEditClicked] = useState(false);
+  const [isContainerEditClicked, setIsContainerEditClicked] = useState(false);
+  const [isContentEditClicked, setIsContentEditClicked] = useState(false);
   const [isContentClicked, setIsContentClicked] = useState(false);
 
   const [isContainerOrderEditClick, setIsContainerOrderEditClick] = useState(false);
@@ -76,27 +76,27 @@ const Classroom = ({
   };
 
   const courseEditClick = () => {
-    setIsCourseEditClick(true);
-    setIsContainerEditClick(false);
-    setIsContentEditClick(false);
+    setIsCourseEditClicked(true);
+    setIsContainerEditClicked(false);
+    setIsContentEditClicked(false);
     setIsContentClicked(false);
     setIsContainerOrderEditClick(false);
     setIsContentOrderEditClick(false);
   };
   const containerEditClick = (e) => {
     updateSelectedContainer(e);
-    setIsContainerEditClick(true);
-    setIsCourseEditClick(false);
-    setIsContentEditClick(false);
+    setIsContainerEditClicked(true);
+    setIsCourseEditClicked(false);
+    setIsContentEditClicked(false);
     setIsContentClicked(false);
     setIsContainerOrderEditClick(false);
     setIsContentOrderEditClick(false);
   };
   const contentEditClick = (e) => {
     updateSelectedContent(e);
-    setIsContentEditClick(true);
-    setIsCourseEditClick(false);
-    setIsContainerEditClick(false);
+    setIsContentEditClicked(true);
+    setIsCourseEditClicked(false);
+    setIsContainerEditClicked(false);
     setIsContentClicked(false);
     setIsContainerOrderEditClick(false);
     setIsContentOrderEditClick(false);
@@ -104,24 +104,24 @@ const Classroom = ({
   const contentBodyClick = (e) => {
     updateSelectedContent(e);
     setIsContentClicked(true);
-    setIsContentEditClick(false);
-    setIsCourseEditClick(false);
-    setIsContainerEditClick(false);
+    setIsContentEditClicked(false);
+    setIsCourseEditClicked(false);
+    setIsContainerEditClicked(false);
     setIsContainerOrderEditClick(false);
     setIsContentOrderEditClick(false);
   };
   const containerOrderEditClick = () => {
-    setIsContainerEditClick(false);
-    setIsCourseEditClick(false);
-    setIsContentEditClick(false);
+    setIsContainerEditClicked(false);
+    setIsCourseEditClicked(false);
+    setIsContentEditClicked(false);
     setIsContentClicked(false);
     setIsContainerOrderEditClick(true);
     setIsContentOrderEditClick(false);
   };
   const contentOrderEditClick = () => {
-    setIsContainerEditClick(false);
-    setIsCourseEditClick(false);
-    setIsContentEditClick(false);
+    setIsContainerEditClicked(false);
+    setIsCourseEditClicked(false);
+    setIsContentEditClicked(false);
     setIsContentClicked(false);
     setIsContainerOrderEditClick(false);
     setIsContentOrderEditClick(true);
@@ -131,8 +131,6 @@ const Classroom = ({
     <div className={classes.classroom}>
       <FileSystem
         isAdmin={isAdmin}
-        course={course}
-        selectedCourse={selectedCourse}
         handleChange={handleChange}
         onContainerSubmit={onContainerSubmit}
         fetchCourseContent={fetchCourseContent}
@@ -145,9 +143,9 @@ const Classroom = ({
       />
       <Editor
         handleChange={handleChange}
-        isCourseEditClick={isCourseEditClick}
-        isContainerEditClick={isContainerEditClick}
-        isContentEditClick={isContentEditClick}
+        isCourseEditClicked={isCourseEditClicked}
+        isContainerEditClicked={isContainerEditClicked}
+        isContentEditClicked={isContentEditClicked}
         isContainerOrderEditClick={isContainerOrderEditClick}
         containerOrderEditClick={containerOrderEditClick}
         isContentOrderEditClick={isContentOrderEditClick}
@@ -156,10 +154,7 @@ const Classroom = ({
         courseTitle={values.courseTitle}
         courseSummary={values.courseSummary}
         containerTitle={values.containerTitle}
-        contentTitle={values.contentTitle}
-        content={values.content}
         selectedCourseData={selectedCourseData}
-        course={course}
         selectedCourseItem={selectedCourseItem}
         fetchCourseData={fetchCourseData}
         adminName={adminName}

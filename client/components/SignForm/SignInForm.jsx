@@ -14,7 +14,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Copyright from '../Copyright';
 import useStyles from './useStyles';
 
-const SignInForm = ({ loggedIn, signIn }) => {
+const SignInForm = ({ signedIn, signIn }) => {
   const classes = useStyles();
   const [isValid, setIsValid] = useState(true);
   const [values, setValues] = React.useState({
@@ -102,7 +102,7 @@ const SignInForm = ({ loggedIn, signIn }) => {
                 <Link to="/signup"> 아직도 회원이 아니십니까? </Link>
               </div>
               <div>
-                {loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
+                {signedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
               </div>
             </Grid>
           </Grid>
@@ -117,7 +117,7 @@ const SignInForm = ({ loggedIn, signIn }) => {
 
 
 SignInForm.propTypes = {
-  loggedIn: propTypes.bool.isRequired,
+  signedIn: propTypes.bool.isRequired,
   signIn: propTypes.func.isRequired,
 };
 

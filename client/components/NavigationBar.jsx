@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NavigationBar = ({ name, loggedIn, signout }) => {
+const NavigationBar = ({ name, signedIn, signout }) => {
   const classes = useStyles();
   return (
     <AppBar className={classes.appBar} color="default" position="relative">
@@ -52,7 +52,7 @@ const NavigationBar = ({ name, loggedIn, signout }) => {
         </Link>
         <div className={classes.grow} />
         <div className={classes.sectionDesktop}>
-          {loggedIn
+          {signedIn
             ? (
               <div className={classes.root}>
                 {name}
@@ -79,7 +79,7 @@ const NavigationBar = ({ name, loggedIn, signout }) => {
 
 NavigationBar.propTypes = {
   name: propTypes.string.isRequired,
-  loggedIn: propTypes.bool.isRequired,
+  signedIn: propTypes.bool.isRequired,
   signout: propTypes.func.isRequired,
 };
 

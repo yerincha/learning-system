@@ -113,7 +113,9 @@ CourseEdit.propTypes = {
   adminName: propTypes.string.isRequired,
   containerOrderEditClick: propTypes.func.isRequired,
 };
+
 CourseEdit.defaultProps = {
   selectedCourseItem: null,
 };
+
 export default CourseEdit;

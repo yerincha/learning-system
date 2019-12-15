@@ -18,7 +18,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: false,
+      signedIn: false,
       userId: 0,
       course: {},
       isAdmin: false,
@@ -52,7 +52,7 @@ class App extends React.Component {
       .then((result) => {
         if (result.status === 200) {
           this.setState({
-            loggedIn: true,
+            signedIn: true,
             userId: result.data.id,
             isAdmin: result.data.admin,
             name: result.data.name,
@@ -87,7 +87,7 @@ class App extends React.Component {
 
   signIn(user) {
     this.setState({
-      loggedIn: true,
+      signedIn: true,
       userId: user.id,
       isAdmin: user.admin,
       name: user.name,
@@ -97,7 +97,7 @@ class App extends React.Component {
   signout() {
     axios.get('/api/signout');
     this.setState({
-      loggedIn: false,
+      signedIn: false,
       isAdmin: false,
       userId: 0,
       name: '',
@@ -108,12 +108,12 @@ class App extends React.Component {
 
   render() {
     const {
-      loggedIn, name, course, isAdmin, selectedCourse, selectedCourseItem, userId,
+      signedIn, name, course, isAdmin, selectedCourse, selectedCourseItem, userId,
     } = this.state;
     const PrivateRoute = () => (
       <Route
         render={() => (
-          loggedIn
+          signedIn
             ? (
               <Classroom
                 course={course}
@@ -132,17 +132,17 @@ class App extends React.Component {
     return (
       <Router>
         <CssBaseline />
-        <NavigationBar name={name} loggedIn={loggedIn} signout={this.signout} />
+        <NavigationBar name={name} signedIn={signedIn} signout={this.signout} />
         <Switch>
           <Route exact path="/signin">
-            <SignInForm signIn={this.signIn} loggedIn={loggedIn} />
+            <SignInForm signIn={this.signIn} signedIn={signedIn} />
           </Route>
           <Route exact path="/signup">
             <SignupForm />
           </Route>
           <Route exact path="/">
             <Home
-              loggedIn={loggedIn}
+              signedIn={signedIn}
               course={course}
               isAdmin={isAdmin}
               adminName={name}

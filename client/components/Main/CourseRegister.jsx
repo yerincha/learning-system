@@ -48,9 +48,9 @@ const CourseRegister = ({ userId, fetchCourseData }) => {
       })
       .catch((err) => {
         if (err.response.code === 400) {
-          alert('The code is wrong. Check it again');
+          alert('The code is wrong. Check the passcode again');
         } else {
-          alert('Something went wrong.');
+          alert('Something went wrong. Please try again');
         }
       });
   };
@@ -95,6 +95,7 @@ const CourseRegister = ({ userId, fetchCourseData }) => {
     </Container>
   );
 };
+
 CourseRegister.propTypes = {
   fetchCourseData: propTypes.func.isRequired,
   userId: propTypes.number.isRequired,

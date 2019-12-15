@@ -70,6 +70,7 @@ ContentOrderEdit.propTypes = {
     })),
   }),
 };
+
 ContentOrderEdit.defaultProps = {
   selectedContainer: {},
 };

@@ -81,7 +81,6 @@ const ContainerCreator = ({
   );
 };
 
-
 ContainerCreator.propTypes = {
   handleChange: propTypes.func.isRequired,
   onContainerSubmit: propTypes.func.isRequired,

@@ -1,4 +1,5 @@
 node_modules
 public/dist/bundle.js
+public/dist/bundle.js.gz
 db/dbconfig.js
 server/content_files/

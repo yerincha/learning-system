@@ -184,7 +184,7 @@ app.post('/api/signin', (req, res) => {
       return db.Session.update({ userId: user.id }, { where: { id: req.session.id } });
     })
     .then(() => {
-      console.log('Successfully logged in!');
+      console.log('Successfully signed in!');
       res.send(user).status(200);
     })
     .catch(() => {

@@ -7,7 +7,7 @@ class Signout extends Component {
   componentDidMount() {
     const { signout } = this.props;
     signout();
-    alert('안전하게 로그아웃 되었습니다.');
+    alert('You signed out safely');
   }
 
   render() {

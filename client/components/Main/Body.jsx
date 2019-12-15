@@ -6,10 +6,10 @@ import CourseRegister from './CourseRegister';
 import CardGrid from './CardGrid';
 
 const Body = ({
-  loggedIn, course, isAdmin, selectedCourse, onViewClick, fetchCourseData, userId,
+  signedIn, course, isAdmin, selectedCourse, onViewClick, fetchCourseData, userId,
 }) => {
   let content = null;
-  if (loggedIn && Object.keys(course).length > 0) {
+  if (signedIn && Object.keys(course).length > 0) {
     content = (
       <div>
         <CardGrid
@@ -22,7 +22,7 @@ const Body = ({
         {isAdmin ? null : <CourseRegister userId={userId} fetchCourseData={fetchCourseData} />}
       </div>
     );
-  } else if (loggedIn) {
+  } else if (signedIn) {
     content = (
       <div>
         {isAdmin ? null : <CourseRegister userId={userId} fetchCourseData={fetchCourseData} />}
@@ -33,11 +33,13 @@ const Body = ({
 };
 
 Body.propTypes = {
-  loggedIn: propTypes.bool.isRequired,
+  signedIn: propTypes.bool.isRequired,
   course: propTypes.objectOf(propTypes.object),
   isAdmin: propTypes.bool.isRequired,
   selectedCourse: propTypes.number.isRequired,
   onViewClick: propTypes.func.isRequired,
+  userId: propTypes.number.isRequired,
+  fetchCourseData: propTypes.func.isRequired,
 };
 
 Body.defaultProps = {

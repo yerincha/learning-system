@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Home = ({
-  loggedIn, course, isAdmin, adminName, fetchCourseData, selectedCourse, onViewClick, userId,
+  signedIn, course, isAdmin, adminName, fetchCourseData, selectedCourse, onViewClick, userId,
 }) => {
   const classes = useStyles();
   const [isClicked, setIsClicked] = useState(false);
@@ -130,7 +130,7 @@ const Home = ({
           </Container>
         </div>
         <Body
-          loggedIn={loggedIn}
+          signedIn={signedIn}
           course={course}
           isAdmin={isAdmin}
           selectedCourse={selectedCourse}
@@ -147,7 +147,7 @@ const Home = ({
 };
 
 Home.propTypes = {
-  loggedIn: propTypes.bool.isRequired,
+  signedIn: propTypes.bool.isRequired,
   isAdmin: propTypes.bool.isRequired,
   course: propTypes.objectOf(propTypes.object),
   adminName: propTypes.string.isRequired,

@@ -20,15 +20,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Editor = ({
-  isCourseEditClick, isContainerEditClick, isContentEditClick, handleChange,
+  isCourseEditClicked, isContainerEditClicked, isContentEditClicked, handleChange,
   fetchCourseContent, courseTitle, courseSummary, containerTitle,
-  contentTitle, content, selectedCourseData, selectedCourseItem,
+  selectedCourseData, selectedCourseItem,
   fetchCourseData, adminName, selectedContainer, selectedContent, isContentClicked,
   isContainerOrderEditClick, containerOrderEditClick, isContentOrderEditClick,
   contentOrderEditClick,
 }) => {
   const renderContent = () => {
-    if (isCourseEditClick) {
+    if (isCourseEditClicked) {
       return (
         <CourseEdit
           handleChange={handleChange}
@@ -41,11 +41,10 @@ const Editor = ({
           containerOrderEditClick={containerOrderEditClick}
         />
       );
-    } else if (isContainerEditClick) {
+    } else if (isContainerEditClicked) {
       return (
         <ContainerEdit
           handleChange={handleChange}
-          fetchCourseContent={fetchCourseContent}
           containerTitle={containerTitle}
           adminName={adminName}
           selectedContainer={selectedContainer}
@@ -53,14 +52,9 @@ const Editor = ({
           contentOrderEditClick={contentOrderEditClick}
         />
       );
-    } else if (isContentEditClick) {
+    } else if (isContentEditClicked) {
       return (
         <ContentEdit
-          handleChange={handleChange}
-          fetchCourseContent={fetchCourseContent}
-          contentTitle={contentTitle}
-          content={content}
-          adminName={adminName}
           selectedContent={selectedContent}
           fetchCourseData={fetchCourseData}
         />
@@ -103,16 +97,14 @@ const Editor = ({
 };
 
 Editor.propTypes = {
-  isCourseEditClick: propTypes.bool.isRequired,
-  isContainerEditClick: propTypes.bool.isRequired,
-  isContentEditClick: propTypes.bool.isRequired,
+  isCourseEditClicked: propTypes.bool.isRequired,
+  isContainerEditClicked: propTypes.bool.isRequired,
+  isContentEditClicked: propTypes.bool.isRequired,
   handleChange: propTypes.func.isRequired,
   fetchCourseContent: propTypes.func.isRequired,
   courseTitle: propTypes.string.isRequired,
   courseSummary: propTypes.string.isRequired,
   containerTitle: propTypes.string.isRequired,
-  contentTitle: propTypes.string.isRequired,
-  content: propTypes.string.isRequired,
   selectedCourseData: propTypes.arrayOf(propTypes.object),
   selectedCourseItem: propTypes.shape({
     id: propTypes.number,

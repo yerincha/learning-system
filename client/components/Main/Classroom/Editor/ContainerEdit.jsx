@@ -144,7 +144,6 @@ ContainerEdit.propTypes = {
 
 ContainerEdit.defaultProps = {
   selectedContainer: null,
-
 };
 
 export default ContainerEdit;
