@@ -2,6 +2,12 @@
 
 ![Screen Shot](/demo/ScreenShot1.png)
 
+>**Now the App is deployed with Docker-compose on AWS ec2 instance!**<br/>
+
+>### **CHECK [DEMO LINK](http://52.53.154.49:3001/) NOW!**<br/>
+
+>**You can see the configration on the docker-compose branch**<br/>
+
 ## Introduction
 
 This is a React Web Application of Learning Management System 
