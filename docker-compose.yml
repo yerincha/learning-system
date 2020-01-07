@@ -1,21 +1,25 @@
 version: '2.1'
 
 services:
-  lms:
-    build: .
+  app:
+    image: lenacha/learning-system_app:latest
+    restart: always
     depends_on:
-      database:
+      db:
         condition: service_healthy
     ports:
-      - '3000:3000'
-
-  database:
-    build: ./server/db
+      - '3001:3001'
     environment:
-      MYSQL_ROOT_PASSWORD: ''
+      MYSQL_HOST: db
+
+  db:
+    image: lenacha/learning-system_db:latest
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
       MYSQL_DATABASE: 'LMS'
     healthcheck:
       test: ['CMD', "mysqladmin", "ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
- 
+      interval: 10s
+

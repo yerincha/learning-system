@@ -83,13 +83,20 @@ const Home = ({
         <div className={classes.heroContent}>
           <Container maxWidth="sm">
             <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-              LEARN CODESTATES
+              LEARNING MANAGEMENT SYSTEM
             </Typography>
             <Typography variant="h5" align="center" color="textSecondary" paragraph>
-              IMMERSION 개발에만 몰두할 수 있는 환경
-              CURRICULUM 실무를 위해 구성된 체계적인 커리큘럼
-              COMMUNITY 협업하고 소통하는 커뮤니티
+              {'WELCOME TO YERIN\'S LMS'}
             </Typography>
+            {isAdmin
+              ? null
+              : (
+                <Typography variant="h6" align="center" color="textSecondary" paragraph>
+                  You can see the tutorials and source code
+                  <br />
+                  at the gitbub repository below.
+                </Typography>
+              )}
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">
                 <Grid item>
@@ -108,8 +115,8 @@ const Home = ({
                     )
                     : (
                       <Button variant="contained" color="primary">
-                        <Linkto color="inherit" href="https://github.com/codestates">
-                          Github Repositories
+                        <Linkto color="inherit" href="https://github.com/lenacha/learning-system">
+                          Github Repository
                         </Linkto>
                       </Button>
                     )}
