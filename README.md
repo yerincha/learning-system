@@ -1,6 +1,6 @@
 # learning-system
 
-![Screen Shot](/demo/ScreenShot1.png)
+![Screen Shot](/demo/ScreenShot.png)
 
 >**Now the App is deployed with Docker-compose on AWS ec2 instance!**<br/>
 
