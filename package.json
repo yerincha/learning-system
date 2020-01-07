@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build-dev": "webpack -d --watch",
+    "build-prod": "webpack --config webpack.config.prod.js",
     "server-dev": "nodemon server/index.js",
     "build": "webpack",
     "start": "node server/index.js"
@@ -70,6 +71,7 @@
     "husky": "^3.1.0",
     "lint-staged": "^9.5.0",
     "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "webpack-s3-plugin": "^1.0.3"
   }
 }

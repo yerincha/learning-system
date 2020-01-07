@@ -47,7 +47,7 @@ const NavigationBar = ({ name, signedIn, signout }) => {
       <Toolbar>
         <Link to="/">
           <Typography variant="h6" color="textPrimary" className={classes.title} noWrap>
-            CODE STATES
+            {'YERIN\'s LMS'}
           </Typography>
         </Link>
         <div className={classes.grow} />
