@@ -2,10 +2,6 @@
 
 ![Screen Shot](/demo/ScreenShot.png)
 
->**Now the App is deployed with Docker-compose on AWS ec2 instance!**<br/>
-
->### **CHECK [DEMO LINK](http://52.53.154.49:3000/) NOW!**<br/>
-
 >**You can see the configration on the docker-compose branch**<br/>
 
 ## Introduction
